@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Para mi Persona Favorita</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Playfair+Display:ital,wght@0,400;1,700&display=swap" rel="stylesheet">
+    <link rel="icon" href="img/corazon.png" type="image/x-icon">
+</head>
+<body>
+    <div id="preloader">
+        <div class="corazon-loader">❤️</div>
+        <p class="texto-loader">Preparando nuestra historia...</p>
+    </div>
+    
+    <div id="contador-flotante" class="contador-mini">
+        <span id="tiempo-transcurrido"></span>
+    </div>
+
+    <section id="inicio" class="full-screen">
+        <div id="background-phrases" class="background-container"></div>
+        
+        <div class="main-container">
+            <h1 class="main-phrase">"En todo el mundo no hay un corazón para mí como el tuyo. En todo el mundo, no hay amor para ti como el mío."</h1>
+            <div class="author">— Maya Angelou</div>
+            <p class="instruccion">Mueve el cursor y desliza hacia abajo...</p>
+        </div>
+
+        <div id="music-container" class="music-control" onclick="toggleMusica()">
+            <span id="music-icon">🔇</span>
+            <audio id="miMusica" loop>
+                <source src="img/la gloria eres tu.mp3" type="audio/mpeg">
+            </audio>
+        </div>
+    </section>
+
+    <section id="galeria" class="full-screen seccion-galeria">
+        <h2 class="titulo-galeria">Nuestros Momentos</h2>
+        <div class="contenedor-polaroids">
+            <div class="polaroid">
+                <img src="img/foto 1.jpg" alt="1er Jaripeo Plazuela juntos">
+                <p class="caption">"1er Jaripeo Plazuela juntos"</p>
+            </div>
+            <div class="polaroid">
+                <img src="img/foto 2.jpg" alt="Lo mejor no es Galvan Grill, lo mejor eres tú!">
+                <p class="caption">"Lo mejor no es Galvan Grill, lo mejor eres tú!"</p>
+            </div>
+            <div class="polaroid">
+                <img src="img/foto 3.jpg" alt="El sol solo ilumina mas tu belleza">
+                <p class="caption">"El sol solo ilumina mas tu belleza"</p>
+            </div>
+            <div class="polaroid">
+                <img src="img/foto 4.jpg" alt="Si tengo los ojos chiquitos es porque me haces feliz">
+                <p class="caption">"Si tengo los ojos chiquitos es porque me haces feliz"</p>
+            </div>
+            <div class="polaroid">
+                <img src="img/foto 5.jpg" alt="Coleccionando momentos (y comida)">
+                <p class="caption">"Coleccionando momentos (y comida)"</p>
+            </div>
+            <div class="polaroid">
+                <img src="img/foto 6.jpg" alt="Hay amor en los tacos de Beto">
+                <p class="caption">"Hay amor en los tacos de Beto"</p>
+            </div>
+            <div class="polaroid">
+                <img src="img/foto 7.jpg" alt="Fererio y collares del amor">
+                <p class="caption">" Fererio y collares del amor"</p>
+            </div>
+            <div class="polaroid">
+                <img src="img/foto 8.jpg" alt="El arte de coincidir contigo">
+                <p class="caption">"El arte de coincidir contigo"</p>
+            </div>
+            <div class="polaroid">
+                <img src="img/foto 9.jpg" alt="Aventuras de dos locos sueltos">
+                <p class="caption">"Aventuras de dos locos sueltos"</p>
+            </div>
+            <div class="polaroid">
+                <img src="img/foto 10.jpg" alt="Simplemente nosotros">
+                <p class="caption">"Simplemente nosotros"</p>
+            </div>
+            <div class="polaroid">
+                <img src="img/foto 11.jpg" alt="Capítulo: Tú y Yo">
+                <p class="caption">"Capítulo: Tú y Yo"</p>
+            </div>
+            <div class="polaroid">
+                <img src="img/foto 12.jpg" alt="Nuestra primer Posada juntos">
+                <p class="caption">Nuestra primer " Posada" juntos</p>
+            </div>
+            <div class="polaroid">
+                <img src="img/foto 13.jpg" alt="Un año en 13 suspiros">
+                <p class="caption">"Un año en 13 suspiros"</p>
+            </div>
+        </div>
+
+        </div> <div class="mensaje-final">
+            <h3 class="gracias" >Gracias por estos momentos ❤️</h3>
+            <p class="nota-final">Cada una de estas fotos es mi parte favorita de la vida porque tú estás en ella.</p>
+            <a href="https://wa.me/4871387510?text=Te%20amo%20mucho,%20gracias%20por%20la%20sorpresa!" class="btn-final">
+                Enviame un mensajito ❤️
+            </a>
+        </div>
+
+    </section>
+
+    <div class="seccion-carta">
+        <button onclick="abrirCarta()" class="btn-sobre">✉️ Toca aquí, tengo algo más que decirte...</button>
+    </div>
+
+    <div id="modal-carta" class="modal">
+        <div class="contenido-modal">
+            <span class="cerrar" onclick="cerrarCarta()">&times;</span>
+            <h2 class="titulo-carta">Para mi persona favorita</h2>
+            <p class="texto-carta">
+                Aquí puedo escribir lo que necesito... <br><br>
+                Puedo extenderme todo lo que quiera.
+            </p>
+            <p class="firma">Con todo mi amor, Kevin</p>
+        </div>
+    </div>
+
+
+    <script src="js/script.js"></script>
+</body>
+</html>

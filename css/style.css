@@ -1,0 +1,415 @@
+:root {
+    --color-fondo: #fcfaf9;
+    --color-texto-fondo: rgba(255, 77, 109, 0.4);
+    --color-acento: #c9184a;
+}
+
+/* --- Base del Sitio --- */
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background-color: var(--color-fondo);
+    font-family: 'Playfair Display', serif;
+    scroll-snap-type: y mandatory;
+    overflow-y: scroll;
+}
+
+.full-screen {
+    min-height: 100vh;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    scroll-snap-align: start;
+}
+
+/* --- Sección Inicio --- */
+.background-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+.bg-phrase {
+    position: absolute;
+    color: var(--color-texto-fondo);
+    font-size: 0.95rem;
+    max-width: 220px;
+    font-style: italic;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.8s ease-in;
+}
+
+.main-container {
+    position: relative;
+    z-index: 100;
+    text-align: center;
+    padding: 40px;
+    background: radial-gradient(circle, rgba(252,250,249,1) 50%, rgba(252,250,249,0) 100%);
+    max-width: 650px;
+}
+
+.main-phrase {
+    font-family: 'Dancing Script', cursive;
+    font-size: 3rem;
+    color: var(--color-acento);
+    margin: 0;
+    text-shadow: 0 0 10px rgba(255,255,255,0.8);
+}
+
+.author {
+    font-size: 0.8rem;
+    letter-spacing: 3px;
+    color: #555;
+    margin-top: 15px;
+}
+
+.instruccion {
+    font-size: 0.9rem;
+    color: var(--color-acento);
+    margin-top: 20px;
+    opacity: 0.6;
+    font-style: italic;
+}
+
+/* --- Sección Galería --- */
+.seccion-galeria {
+    min-height: 100vh;
+    height: auto;
+    background: linear-gradient(to bottom, #fcfaf9, #ffe5ec);
+    padding: 100px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    scroll-snap-align: none;
+}
+
+.titulo-galeria {
+    font-family: 'Dancing Script', cursive;
+    font-size: 4rem;
+    background: linear-gradient(transparent 60%, #ffe5ec 60%);
+    display: inline-block;
+    padding: 0 15px;
+    color: var(--color-acento);
+    margin-bottom: 50px;
+    text-align: center;
+}
+
+.contenedor-polaroids {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 50px;
+    max-width: 1100px;
+    width: 100%;
+}
+
+.polaroid {
+    background: white;
+    padding: 15px 15px 45px 15px;
+    box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    opacity: 0;
+    transform: translateY(50px);
+}
+
+.polaroid:first-child img {
+        object-position: center 20% !important; 
+    }
+
+.polaroid:hover {
+    transform: rotate(0deg) scale(1.1) !important;
+    box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+    z-index: 100;
+}
+
+.polaroid img {
+    width: 100%;
+    height: 280px;
+    object-fit: cover;
+    filter: sepia(0.2) contrast(1.1);
+    transition: filter 0.3s;
+}
+
+.polaroid:hover img {
+    filter: sepia(0) contrast(1);
+}
+
+/* Brillo sutil en las fotos al pasar el mouse */
+.polaroid::after {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: linear-gradient(135deg, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0) 50%);
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+}
+
+.polaroid:hover::after {
+    opacity: 1;
+}
+
+.polaroid .caption {
+    font-family: 'Dancing Script', cursive;
+    font-size: 20px;
+    text-align: center;
+    margin-top: 15px;
+}
+
+/* Rotaciones variadas */
+.polaroid:nth-child(4n+1) { transform: rotate(-4deg); }
+.polaroid:nth-child(4n+2) { transform: rotate(3deg); }
+.polaroid:nth-child(4n+3) { transform: rotate(-2deg); }
+.polaroid:nth-child(4n+4) { transform: rotate(5deg); }
+
+/* --- Mensaje Final --- */
+.mensaje-final {
+    margin: 80px 20px;
+    text-align: center;
+    font-family: 'Dancing Script', cursive;
+}
+
+.mensaje-final p {
+    font-size: 1.5rem;
+    color: #777;
+}
+
+.gracias {
+    font-size: 2.5rem;
+    color: var(--color-acento);
+    margin-top: 10px;
+}
+
+/* --- Controles y Animaciones --- */
+.music-control {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 50px;
+    height: 50px;
+    background-color: var(--color-acento);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    z-index: 2000;
+}
+
+.latido {
+    animation: latido 1.2s infinite;
+}
+
+/* Estilo del contador flotante */
+.contador-mini {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(5px); /* Efecto de vidrio esmerilado */
+    padding: 8px 15px;
+    border-radius: 30px;
+    border: 1px solid var(--color-acento);
+    z-index: 3000; /* Por encima de la música y todo */
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    pointer-events: none; /* Para que no estorbe si intenta hacer clic detrás */
+}
+
+#tiempo-transcurrido {
+    font-family: 'Dancing Script', cursive;
+    color: var(--color-acento);
+    font-size: 0.9rem;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+/* --- CARTA --- */
+.seccion-carta { text-align: center; padding: 50px 0; }
+
+.btn-sobre {
+    background: var(--color-acento);
+    color: white;
+    border: none;
+    padding: 15px 25px;
+    border-radius: 50px;
+    font-family: 'Dancing Script', cursive;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: transform 0.3s;
+}
+.btn-sobre:hover { transform: scale(1.1); }
+
+/* El Modal (fondo) */
+.modal {
+    display: none; position: fixed; z-index: 5000;
+    left: 0; top: 0; width: 100%; height: 100%;
+    background-color: rgba(0,0,0,0.5); backdrop-filter: blur(5px);
+}
+/* Contenido de la carta */
+.contenido-modal {
+    background-color: #fffaf0; margin: 10% auto; padding: 30px;
+    width: 80%; max-width: 500px; border-radius: 15px;
+    box-shadow: 0 5px 30px rgba(0,0,0,0.3);
+    position: relative; font-family: 'Playfair Display', serif;
+}
+.cerrar { position: absolute; right: 20px; top: 10px; font-size: 28px; cursor: pointer; }
+.titulo-carta { font-family: 'Dancing Script', cursive; color: var(--color-acento); }
+.texto-carta { line-height: 1.6; color: #444; }
+
+/* Pantalla completa del cargador */
+#preloader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--color-fondo);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999; /* Por encima de TODO */
+    transition: opacity 1s ease, visibility 1s;
+}
+
+/* Animación del corazón latiendo */
+.corazon-loader {
+    font-size: 50px;
+    animation: latido-loader 1.2s infinite;
+}
+
+.texto-loader {
+    font-family: 'Dancing Script', cursive;
+    color: var(--color-acento);
+    font-size: 1.5rem;
+    margin-top: 20px;
+}
+
+@keyframes latido-loader {
+    0% { transform: scale(1); }
+    15% { transform: scale(1.3); }
+    30% { transform: scale(1); }
+    45% { transform: scale(1.15); }
+    60% { transform: scale(1); }
+}
+
+@keyframes floatUp {
+    0% { transform: translateY(0) scale(1); opacity: 1; }
+    100% { transform: translateY(-50px) scale(1.5); opacity: 0; }
+}
+
+/* Clase para ocultarlo con suavidad */
+.loader-hidden {
+    opacity: 0;
+    visibility: hidden;
+}
+
+@keyframes latido {
+    0% { transform: scale(1); }
+    15% { transform: scale(1.2); }
+    30% { transform: scale(1); }
+}
+
+/* --- OPTIMIZACIÓN MÓVIL UNIFICADA --- */
+@media (max-width: 600px) {
+    /* Evitamos que el cuerpo de la página se deslice a la derecha */
+    body, html {
+        overflow-x: hidden;
+        width: 100%;
+    }
+
+    .contador-mini {
+        top: 10px;
+        right: 10px;
+        padding: 5px 12px;
+    }
+
+    #tiempo-transcurrido {
+        font-size: 0.75rem;
+    }
+
+    .main-phrase {
+        font-size: 1.2rem !important;
+        line-height: 1.2;
+    }
+
+    .main-container {
+        width: 85%; /* Un poco más ancho para aprovechar el espacio */
+        padding: 20px;
+        background: radial-gradient(circle, rgba(252,250,249,1) 75%, rgba(252,250,249,0) 100%);
+    }
+
+    .bg-phrase {
+        font-size: 0.65rem !important; 
+        max-width: 100px;
+        opacity: 0.4;
+        line-height: 1.1;
+        text-align: center;
+    }
+
+    .seccion-galeria {
+        padding: 60px 10px; /* Menos espacio a los lados para que quepan las fotos */
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .titulo-galeria {
+        font-size: 2.2rem !important; /* Más pequeño para que no ocupe tanto espacio */
+        margin-bottom: 30px;
+    }
+
+    .contenedor-polaroids {
+        /* FORZAMOS 2 COLUMNAS fijas para que no haya scroll lateral */
+        grid-template-columns: 1fr 1fr; 
+        gap: 10px; /* Espacio reducido entre fotos */
+        padding: 0 5px;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .polaroid {
+        padding: 6px 6px 18px 6px; /* Bordes muy delgados */
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .polaroid img {
+        height: 140px; /* Altura reducida para que encaje bien en las 2 columnas */
+    }
+
+    .polaroid .caption {
+        font-size: 11px; /* Letra más pequeña para que no se corte */
+        margin-top: 8px;
+    }
+
+    /* Ajuste de rostros para la primera foto */
+    .polaroid:first-child img {
+        object-position: center 20% !important; 
+    }
+
+    .music-control {
+        bottom: 20px;
+        right: 20px;
+        width: 45px;
+        height: 45px;
+    }
+
+    .mensaje-final p {
+        font-size: 1.1rem;
+    }
+    
+    .gracias {
+        font-size: 1.8rem;
+    }
+}
