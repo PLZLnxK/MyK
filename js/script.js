@@ -204,3 +204,30 @@ window.onload = () => {
     }, 3000);
     setInterval(actualizarContador, 1000); // Se actualiza cada 24 horas
 };
+
+// Función para el Lightbox
+document.querySelectorAll('.polaroid').forEach(item => {
+    item.addEventListener('click', function() {
+        const imgPath = this.querySelector('img').src;
+        const captionText = this.querySelector('.caption').innerText;
+        
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightbox-img');
+        const lightboxCap = document.getElementById('lightbox-caption');
+        
+        lightboxImg.src = imgPath;
+        lightboxCap.innerText = captionText;
+        lightbox.classList.add('active');
+    });
+});
+
+// Opcional: Hacer que las fotos aparezcan con un retraso (efecto cascada)
+function aparecerCascada() {
+    const polaroids = document.querySelectorAll('.polaroid');
+    polaroids.forEach((p, index) => {
+        setTimeout(() => {
+            p.style.opacity = "1";
+            p.style.transform = p.style.transform.replace('translateY(50px)', 'translateY(0)');
+        }, index * 200); // Aparecen cada 200ms
+    });
+}
