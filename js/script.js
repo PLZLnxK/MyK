@@ -352,3 +352,43 @@ document.querySelectorAll('.polaroid').forEach(item => {
 document.getElementById('lightbox')?.addEventListener('click', function() {
     this.classList.remove('active');
 });
+
+// --- EASTER EGG: Corazón en Foto Especial ---
+const specialPhoto = document.getElementById('special-photo');
+
+if (specialPhoto) {
+    // Escuchar click (PC) y touchstart (Celular)
+    specialPhoto.addEventListener('click', showSecretHeart);
+    specialPhoto.addEventListener('touchstart', showSecretHeart);
+}
+
+function showSecretHeart(e) {
+    // Evita comportamientos extraños en celular y el comportamiento por defecto
+    e.preventDefault(); 
+    
+    // Crear el corazón
+    const heart = document.createElement('div');
+    heart.innerText = "❤️";
+    heart.style.position = 'fixed';
+    heart.style.top = '50%';
+    heart.style.left = '50%';
+    heart.style.transform = 'translate(-50%, -50%) scale(0)';
+    heart.style.fontSize = '120px';
+    heart.style.zIndex = '999999'; // Muy por encima de todo
+    heart.style.transition = 'all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+    heart.style.pointerEvents = 'none'; // Para que no bloquee clicks
+    heart.style.textShadow = '0 0 20px rgba(255, 0, 0, 0.5)';
+    
+    document.body.appendChild(heart);
+    
+    // Animación de aparición (efecto pop)
+    setTimeout(() => {
+        heart.style.transform = 'translate(-50%, -50%) scale(1)';
+    }, 10);
+    
+    // Desaparición y eliminación
+    setTimeout(() => {
+        heart.style.transform = 'translate(-50%, -50%) scale(0)';
+        setTimeout(() => heart.remove(), 600);
+    }, 1800);
+}

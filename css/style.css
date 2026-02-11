@@ -389,12 +389,64 @@ body::before {
 
 /* --- RESPONSIVE (MÓVIL) --- */
 @media (max-width: 600px) {
-    .main-phrase { font-size: 1.5rem !important; }
-    .titulo-galeria { font-size: 2.2rem !important; margin-bottom: 30px;}
-    .contenedor-polaroids { gap: 20px; }
-    .polaroid img { height: 160px; }
-    .polaroid { padding: 10px 10px 25px 10px; }
+    .main-phrase { font-size: 1.8rem !important; }
+    .titulo-galeria { font-size: 2.2rem !important; margin-bottom: 20px;}
+    
+    /* 1. Forzar una sola columna centrada */
+    .contenedor-polaroids { 
+        display: flex;
+        flex-direction: column;
+        align-items: center; /* Centra las tarjetas horizontalmente */
+        gap: 20px; 
+        width: 100%;
+        max-width: 250px; /* Tamaño máximo estrecho para móvil */
+        margin: 0 auto; /* Centra el contenedor mismo */
+        padding: 0;
+    }
+    
+    /* 2. Ajustes de la tarjeta polaroid */
+    .polaroid { 
+        width: 100%; 
+        padding: 10px 10px 30px 10px; 
+        box-sizing: border-box;
+        transform: none !important; /* QUITA LA ROTACIÓN */
+        margin: 0; /* Quita márgenes extra */
+    }
+    
+    /* 3. Tamaño de la imagen más pequeño */
+    .polaroid img { 
+        height: 150px; /* Altura más pequeña */
+        object-fit: cover;
+    }
+    
+    .polaroid .caption {
+        font-size: 16px; 
+        margin-top: 10px;
+    }
+    
     .lightbox img { border: 5px solid white; }
+    .lightbox-caption { font-size: 1.2rem; }
+
+    /* --- 4. ARREGLO FÍSICO DE LA CARTA EN MÓVIL --- */
+    .contenido-modal {
+        width: 90% !important;        /* Fuerza el ancho */
+        padding: 15px !important;     /* Reduce espacio interno */
+        margin-top: 5vh !important;  /* Centra verticalmente mejor */
+        max-height: 85vh !important;  /* Limita altura */
+        overflow-y: auto !important;  /* Scroll interno si hace falta */
+        box-sizing: border-box !important;
+    }
+    
+    .titulo-carta {                
+        font-size: 1.8rem !important; /* Título más pequeño */
+        margin-bottom: 10px !important;
+    }
+    
+    .texto-carta {
+        font-size: 0.95rem !important; /* Texto más pequeño */
+        line-height: 1.5 !important;
+        text-align: justify !important;
+    }
 }
 
 /* --- Forzar Confeti al Frente --- */
