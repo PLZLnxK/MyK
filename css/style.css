@@ -251,6 +251,16 @@ body {
     z-index: 2000;
 }
 
+.music-control.playing {
+    animation: rotate 3s linear infinite;
+    border: 3px solid var(--color-acento);
+}
+
+@keyframes rotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
 .latido {
     animation: latido 1.2s infinite;
 }

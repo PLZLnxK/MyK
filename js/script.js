@@ -23,10 +23,8 @@ function cargarFrases() {
     const altoPantalla = window.innerHeight;
     const esMovil = anchoPantalla < 600;
 
-    // En móvil usamos solo 6 frases para que no se empalmen
-    const frasesAjustadas = esMovil ? frasesDeFondo.slice(0, 6) : frasesDeFondo;
+    const frasesAjustadas = esMovil ? frasesDeFondo.slice(0, 5) : frasesDeFondo;
 
-    // Reiniciamos rectángulos para el cálculo
     rectsOcupados = [];
 
     frasesAjustadas.forEach(texto => {
@@ -35,15 +33,13 @@ function cargarFrases() {
         span.innerText = texto;
         contenedor.appendChild(span);
 
-        // Aumentamos el margen de seguridad entre frases en móvil
-        const anchoFrase = span.offsetWidth + (esMovil ? 60 : 40);
-        const altoFrase = span.offsetHeight + (esMovil ? 60 : 40);
+        const anchoFrase = span.offsetWidth + (esMovil ? 30 : 40);
+        const altoFrase = span.offsetHeight + (esMovil ? 30 : 40);
 
         let posValida = false;
         let intentos = 0;
         let x, y;
 
-        // ÁREA DE RESPETO: En móvil el centro es un rectángulo vertical más largo
         const margenX = esMovil ? 0.35 : 0.25; 
         const margenY = esMovil ? 0.30 : 0.25;
 
@@ -51,7 +47,6 @@ function cargarFrases() {
             x = Math.random() * (anchoPantalla - anchoFrase);
             y = Math.random() * (altoPantalla - altoFrase);
 
-            // Verificamos si cae en la zona de la frase principal
             const enCentroX = x > anchoPantalla * (0.5 - margenX) && x < anchoPantalla * (0.5 + margenX);
             const enCentroY = y > altoPantalla * (0.5 - margenY) && y < altoPantalla * (0.5 + margenY);
 
@@ -68,7 +63,6 @@ function cargarFrases() {
             intentos++;
         }
 
-        // Si después de 200 intentos no halló lugar, no la ponemos (mejor que se vea limpio a que se empalme)
         if (posValida) {
             const rotacion = (Math.random() - 0.5) * (esMovil ? 10 : 20);
             span.dataset.rotation = rotacion;
@@ -82,12 +76,11 @@ function cargarFrases() {
     });
 }
 
-// PARALLAX MEJORADO: En móviles el movimiento es más sutil para no marear
+// PARALLAX
 document.addEventListener('mousemove', (e) => {
     moverFrases(e.pageX, e.pageY);
 });
 
-// También respondemos al toque en móviles (opcional pero lindo)
 document.addEventListener('touchmove', (e) => {
     moverFrases(e.touches[0].pageX, e.touches[0].pageY);
 });
@@ -95,7 +88,7 @@ document.addEventListener('touchmove', (e) => {
 function moverFrases(inputX, inputY) {
     const frases = document.querySelectorAll('.bg-phrase');
     const esMovil = window.innerWidth < 600;
-    const divisor = esMovil ? 40 : 25; // Más sutil en móvil
+    const divisor = esMovil ? 60 : 40; 
 
     const moveX = (window.innerWidth / 2 - inputX) / divisor;
     const moveY = (window.innerHeight / 2 - inputY) / divisor;
@@ -106,30 +99,32 @@ function moverFrases(inputX, inputY) {
     });
 }
 
+// CORAZONES FONDO
 function crearCorazon() {
     const corazon = document.createElement('div');
     corazon.innerHTML = '❤️';
-    corazon.className = 'corazon-flotante'; // Usamos clase para mejor control
-    corazon.style.position = 'absolute';
+    corazon.className = 'corazon-flotante';
+    corazon.style.position = 'fixed';
     corazon.style.left = Math.random() * 100 + 'vw';
     corazon.style.top = '100vh';
-    corazon.style.fontSize = (Math.random() * 20 + 10) + 'px';
-    corazon.style.opacity = Math.random() * 0.5;
+    corazon.style.fontSize = (Math.random() * 15 + 10) + 'px';
+    corazon.style.opacity = Math.random() * 0.4;
     corazon.style.zIndex = '0';
     corazon.style.pointerEvents = 'none';
-    corazon.style.transition = 'transform 5s linear, opacity 5s';
+    corazon.style.transition = 'transform 6s linear';
     
     document.body.appendChild(corazon);
 
     setTimeout(() => {
         corazon.style.transform = `translateY(-110vh) rotate(${Math.random() * 360}deg)`;
-    }, 100);
+    }, 50);
 
     setTimeout(() => { corazon.remove(); }, 6000);
 }
 
-setInterval(crearCorazon, 500);
+setInterval(crearCorazon, 800);
 
+// MÚSICA
 function toggleMusica() {
     const musica = document.getElementById('miMusica');
     const icono = document.getElementById('music-icon');
@@ -137,48 +132,52 @@ function toggleMusica() {
 
     if (musica.paused) {
         musica.play().catch(e => console.log("Esperando interacción..."));
-        icono.innerText = '❤️';
-        contenedor.classList.add('latido');
+        icono.innerText = '🎵';
+        contenedor.classList.add('playing');
     } else {
         musica.pause();
         icono.innerText = '🔇';
-        contenedor.classList.remove('latido');
+        contenedor.classList.remove('playing');
     }
 }
 
-// Nueva función para detectar cuando las fotos entran en pantalla
+// SCROLL FOTOS
 function checkScroll() {
     const polaroids = document.querySelectorAll('.polaroid');
     polaroids.forEach(p => {
         const rect = p.getBoundingClientRect();
-        if (rect.top < window.innerHeight * 0.9) {
+        if (rect.top < window.innerHeight * 0.85) {
             p.style.opacity = "1";
             p.style.transform = p.style.transform.replace('translateY(50px)', 'translateY(0)');
         }
     });
 }
 
+// CONTADOR
 function actualizarContador() {
-    const fechaInicio = new Date(2024, 6, 21); // 21 de Julio 2024
+    const fechaInicio = new Date("2024-07-21T00:00:00"); // <--- AQUI LA FECHA
     const ahora = new Date();
     const dif = ahora - fechaInicio;
 
     const dias = Math.floor(dif / (1000 * 60 * 60 * 24));
     const horas = Math.floor((dif % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
     const minutos = Math.floor((dif % (1000 * 60 * 60)) / (1000 * 60));
-    const segundos = Math.floor((dif % (1000 * 60)) / 1000);
 
     const elemento = document.getElementById('tiempo-transcurrido');
     if(elemento) {
-        elemento.innerText = `${dias}d ${horas}h ${minutos}m ${segundos}s juntos ❤️`;
+        elemento.innerText = `${dias}d ${horas}h ${minutos}m juntos ❤️`;
     }
 }
 
-function abrirCarta() { document.getElementById('modal-carta').style.display = 'block'; }
+// MODAL
+function abrirCarta() { document.getElementById('modal-carta').style.display = 'flex'; }
 function cerrarCarta() { document.getElementById('modal-carta').style.display = 'none'; }
 
-//corazones al hacer click
+// CLICK CORAZONES
 document.addEventListener('click', (e) => {
+    // Evitar corazones si se hace click en el boton de musica
+    if(e.target.closest('.music-control')) return;
+
     const clickCorazon = document.createElement('div');
     clickCorazon.innerHTML = '❤️';
     clickCorazon.style.position = 'fixed';
@@ -193,19 +192,22 @@ document.addEventListener('click', (e) => {
     setTimeout(() => clickCorazon.remove(), 1000);
 });
 
+// EVENTOS
 window.addEventListener('scroll', checkScroll);
 window.onload = () => {
     cargarFrases();
-    checkScroll(); // Revisar si ya hay fotos visibles
-    actualizarContador(); // Iniciar el contador
+    checkScroll();
+    actualizarContador();
+    setInterval(actualizarContador, 1000); 
+
     setTimeout(() => {
         const loader = document.getElementById('preloader');
-        loader.classList.add('loader-hidden');
-    }, 3000);
-    setInterval(actualizarContador, 1000); // Se actualiza cada 24 horas
+        loader.style.opacity = '0';
+        setTimeout(() => loader.style.display = 'none', 500);
+    }, 2000);
 };
 
-// Función para el Lightbox
+// LIGHTBOX FOTOS
 document.querySelectorAll('.polaroid').forEach(item => {
     item.addEventListener('click', function() {
         const imgPath = this.querySelector('img').src;
@@ -220,14 +222,3 @@ document.querySelectorAll('.polaroid').forEach(item => {
         lightbox.classList.add('active');
     });
 });
-
-// Opcional: Hacer que las fotos aparezcan con un retraso (efecto cascada)
-function aparecerCascada() {
-    const polaroids = document.querySelectorAll('.polaroid');
-    polaroids.forEach((p, index) => {
-        setTimeout(() => {
-            p.style.opacity = "1";
-            p.style.transform = p.style.transform.replace('translateY(50px)', 'translateY(0)');
-        }, index * 200); // Aparecen cada 200ms
-    });
-}
