@@ -573,8 +573,7 @@ window.onload = () => {
     }, 3500);
 };
 
-// --- 12. EASTER EGG (SECRET CODE "MI CIELO") ---
-let secretCode = "micielo";
+// --- 12. EASTER EGGS (SECRET CODES) ---
 let inputBuffer = "";
 
 window.addEventListener("keydown", (e) => {
@@ -585,18 +584,139 @@ window.addEventListener("keydown", (e) => {
     if (e.key.length === 1 && e.key.match(/[a-zA-Z]/)) {
         inputBuffer += e.key.toLowerCase();
 
-        // Keep string length capped
-        if (inputBuffer.length > secretCode.length) {
-            inputBuffer = inputBuffer.substring(inputBuffer.length - secretCode.length);
+        // Keep string length capped to longest code
+        if (inputBuffer.length > 20) {
+            inputBuffer = inputBuffer.substring(inputBuffer.length - 20);
         }
 
-        // Match found!
-        if (inputBuffer === secretCode) {
+        // Matches!
+        if (inputBuffer.endsWith("micielo")) {
             triggerEasterEgg();
+            inputBuffer = ""; // Reset limit
+        }
+        if (inputBuffer.endsWith("ginger")) {
+            triggerGingerEasterEgg();
             inputBuffer = ""; // Reset limit
         }
     }
 });
+
+function triggerGingerEasterEgg() {
+    if(document.getElementById('ginger-overlay')) return; // Prevent multiple instances
+
+    // 1. Black overlay like a cinema
+    const overlay = document.createElement("div");
+    overlay.id = 'ginger-overlay';
+    overlay.style.position = 'fixed';
+    overlay.style.top = '0';
+    overlay.style.left = '0';
+    overlay.style.width = '100vw';
+    overlay.style.height = '100vh';
+    overlay.style.backgroundColor = 'rgba(0,0,0,0.6)';
+    overlay.style.zIndex = '9998';
+    overlay.style.transition = 'opacity 0.5s';
+    
+    // 2. The 3D Dog Container
+    const dog = document.createElement("div");
+    dog.id = 'ginger-dog';
+    
+    // Using the pre-processed transparent 3D image
+    const dogImg = document.createElement("img");
+    dogImg.src = "img/ginger_alpha.png";
+    dogImg.alt = "Ginger 3D Rottweiler";
+    dogImg.style.width = "450px"; 
+    dogImg.style.height = "auto";
+    dogImg.style.display = "block";
+    dogImg.style.filter = "drop-shadow(15px 25px 20px rgba(0,0,0,0.9))"; 
+    
+    // Inner wrapper for the running "wobble" animation
+    const innerWrapper = document.createElement("div");
+    innerWrapper.appendChild(dogImg);
+    dog.appendChild(innerWrapper);
+    
+    dog.style.position = "fixed";
+    dog.style.pointerEvents = "none";
+    dog.style.zIndex = "9999";
+    dog.style.transformOrigin = "center bottom";
+
+    const startY = Math.floor(Math.random() * 40) + 10; 
+    const midY = Math.floor(Math.random() * 50) + 10;
+    const endY = Math.floor(Math.random() * 30) + 30;
+    
+    const animId = 'run3D_' + Date.now();
+    if(!document.getElementById('ginger-styles')) {
+        const style = document.createElement("style");
+        style.id = 'ginger-styles';
+        document.head.appendChild(style);
+    }
+    
+    const styleSheet = document.getElementById('ginger-styles');
+    styleSheet.innerHTML = `
+        @keyframes ${animId} {
+            0% { 
+                left: -500px; 
+                top: ${startY}%;
+                transform: scale(0.3) perspective(800px) translateZ(-300px) rotateY(-20deg); 
+            }
+            30% { 
+                top: ${midY}%;
+                transform: scale(0.8) perspective(800px) translateZ(100px) rotateY(-5deg); 
+            }
+            70% { 
+                top: ${endY}%;
+                transform: scale(1.3) perspective(800px) translateZ(300px) rotateY(15deg); 
+            }
+            100% { 
+                left: 110vw; 
+                top: ${endY - 10}%;
+                transform: scale(0.6) perspective(800px) translateZ(-100px) rotateY(30deg); 
+            }
+        }
+        @keyframes gingerBobbing {
+            0% { padding-top: 0px; }
+            100% { padding-top: 50px; }
+        }
+        @keyframes gingerLegsMove {
+            0% { transform: rotate(-8deg) translateY(-5px); }
+            100% { transform: rotate(12deg) translateY(5px); }
+        }
+    `;
+
+    // Forward path + up/down bouncing
+    dog.style.animation = `${animId} 3.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards, gingerBobbing 0.25s infinite alternate ease-in-out`;
+    // Fast leg "wobbling" rotation
+    innerWrapper.style.animation = "gingerLegsMove 0.15s infinite alternate ease-in-out";
+
+    const nameText = document.createElement('div');
+    nameText.innerText = "¡Ginger! 🐾";
+    nameText.style.position = 'absolute';
+    nameText.style.top = '-40px';
+    nameText.style.left = '50%';
+    nameText.style.transform = 'translateX(-50%)';
+    nameText.style.fontSize = '50px';
+    nameText.style.fontFamily = 'var(--font-heading)';
+    nameText.style.color = '#ff9900';
+    nameText.style.textShadow = '0 0 20px #ff0000, 2px 2px 0px #000';
+    nameText.style.whiteSpace = 'nowrap';
+    dog.appendChild(nameText);
+
+    document.body.appendChild(overlay);
+    document.body.appendChild(dog);
+
+    try {
+        const bark = new Audio('https://www.soundjay.com/nature/sounds/dog-barking-2.mp3');
+        bark.volume = 0.5;
+        bark.play().catch(e => {}); 
+    } catch(e) {}
+
+    setTimeout(() => {
+        overlay.style.opacity = '0';
+        setTimeout(() => {
+            if(overlay.parentNode) overlay.remove();
+            if(dog.parentNode) dog.remove();
+        }, 500);
+    }, 4000);
+}
 
 function triggerEasterEgg() {
     // 1. Epic Confetti Explosion (Sides to center)
