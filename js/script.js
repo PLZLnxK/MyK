@@ -1,260 +1,332 @@
-// --- 1. ANIMACIONES DE SCROLL (Intersection Observer) ---
-const observer = new IntersectionObserver((entries) => {
+// --- 1. CUSTOM CURSOR & BLUR EFFECT ---
+const cursor = document.getElementById('cursor');
+const cursorBlur = document.getElementById('cursor-blur');
+
+let mouseX = window.innerWidth / 2;
+let mouseY = window.innerHeight / 2;
+
+// Update mouse globally for cursor and constellations
+document.addEventListener('mousemove', (e) => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+});
+
+// Only run cursor logic if on non-touch device
+if (window.matchMedia("(pointer: fine)").matches) {
+    let cursorX = mouseX;
+    let cursorY = mouseY;
+    let blurX = mouseX;
+    let blurY = mouseY;
+
+    // Smooth Lerp for Cursor
+    function animateCursor() {
+        // Cursor dot - fast follow
+        cursorX += (mouseX - cursorX) * 0.2;
+        cursorY += (mouseY - cursorY) * 0.2;
+
+        // Blur - slow follow (parallax feel)
+        blurX += (mouseX - blurX) * 0.05;
+        blurY += (mouseY - blurY) * 0.05;
+
+        if (cursor) cursor.style.transform = `translate(${cursorX}px, ${cursorY}px)`;
+        if (cursorBlur) cursorBlur.style.transform = `translate(${blurX}px, ${blurY}px)`;
+
+        requestAnimationFrame(animateCursor);
+    }
+    animateCursor();
+
+    // Hover effects on interactive elements
+    const iteractives = document.querySelectorAll('a, button, .polaroid, .music-control, #envelope');
+    iteractives.forEach(el => {
+        el.addEventListener('mouseenter', () => {
+            if (cursor) cursor.classList.add('cursor-hover');
+        });
+        el.addEventListener('mouseleave', () => {
+            if (cursor) cursor.classList.remove('cursor-hover');
+        });
+    });
+}
+
+// --- 2. 3D TILT EFFECT FOR POLAROIDS ---
+// Utiliza la librería VanillaTilt importada en HTML
+if (typeof VanillaTilt !== 'undefined') {
+    VanillaTilt.init(document.querySelectorAll(".tilt-effect"), {
+        max: 15,
+        speed: 400,
+        glare: true,
+        "max-glare": 0.2,
+        scale: 1.05
+    });
+}
+
+// --- 3. SCROLL REVEAL (Intersection Observer) ---
+const revealObserver = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
         if (entry.isIntersecting) {
-            entry.target.classList.add('show');
-            // Una vez animado, dejamos de observar para mejorar rendimiento
-            observer.unobserve(entry.target);
+            entry.target.classList.add('active');
+            revealObserver.unobserve(entry.target);
         }
     });
-}, { threshold: 0.1 });
+}, { threshold: 0.1, rootMargin: "0px 0px -50px 0px" });
 
-// Seleccionar elementos a animar (fotos y textos principales)
-const hiddenElements = document.querySelectorAll('.polaroid, .main-container h1, .main-container p');
-hiddenElements.forEach((el) => observer.observe(el));
+document.querySelectorAll('.reveal-element').forEach((el) => revealObserver.observe(el));
 
-// --- 2. CONFIGURACIÓN Y FRASES ---
+// --- 4. CONFIGURACIÓN Y FRASES (Románticas/Cósmicas) ---
 const frasesDeFondo = [
-    // 1-20: Romances Épicos y Fantasía
-    "Incluso si el mundo entero se pusiera en nuestra contra, no me importaría, siempre y cuando estés a mi lado. - Pokémon",
-    "Si pudiera pedir un deseo al universo, pediría que nuestras almas se encuentren en todas las vidas que tengamos. - Your Name",
-    "Eres la razón por la que entiendo la palabra 'eternidad'. - Violet Evergarden",
-    "Aunque el mundo se desmorone, mi amor por ti seguirá brillando más que cualquier estrella. - Sailor Moon",
-    "Dicen que las estrellas son los ojos del universo cuidando a los amantes. Si es así, estamos muy protegidos. - Cardcaptor Sakura",
-    "Nuestras almas fueron hechas de la misma materia estelar. - Sailor Moon",
-    "No importa cuántas reencarnaciones pasen, siempre te encontraré. - Inuyasha",
-    "Tu amor es la única constante en este universo caótico. - Inuyasha",
-    "Aunque estemos en mundos diferentes, nuestros corazones laten al mismo ritmo. - Your Name",
-    "Quiero ver el amanecer contigo en mil mundos diferentes. - Fruits Basket",
-    "Eres la luna que ilumina mis noches oscuras. - Inuyasha",
-    "El amor es la fuerza más poderosa del universo, y yo la siento por ti. - Sailor Moon",
-    "Tú eres mi destino, mi principio y mi fin. - Naruto",
-    "Contigo, el tiempo se detiene y el universo cobra sentido. - Fruits Basket",
-    "Eres la estrella más brillante en mi cielo personal. - Cardcaptor Sakura",
-    "Nuestro amor es una obra de arte pintada en el lienzo del cielo. - Sailor Moon",
-    "Contigo, cada día es una nueva aventura cósmica. - Dragon Ball",
-    "Eres mi refugio seguro en medio de la tormenta espacial. - Macross",
-    "La distancia no importa cuando dos corazones están unidos. - Naruto",
-    "Eres la luz que disipa mi oscuridad. - Inuyasha",
-
-    // 21-40: Intensas y Dramáticas
-    "Te amaré hasta que la última estrella se apague. - Violet Evergarden",
-    "Eres la persona que le da color a mi mundo en blanco y negro. - Your Lie in April",
-    "No puedo imaginar un futuro donde tú no estés. - Clannad",
-    "Tu sonrisa es mi motor, tu mirada mi guía. - Naruto",
-    "Eres la pieza que le faltaba a mi rompecabezas. - Evangelion",
-    "Contigo, la vida es bella, incluso en los momentos difíciles. - Clannad",
-    "Eres mi pensamiento favorito, mi sueño más dulce. - Kaichou wa Maid-sama!",
-    "Te quiero más allá de la razón, más allá de la lógica. - Steins;Gate",
-    "Eres la casualidad más bonita que me ha pasado. - Toradora!",
-    "Nuestro amor es un fuego que nunca se apaga. - Inuyasha",
-    "Te elegiría a ti una y mil veces más. - Clannad",
-    "Tu voz es la melodía que calma mi alma. - Kimi ni Todoke",
-    "Eres mi refugio en la tormenta, mi calma en el caos. - Naruto",
-    "No te quiero para mí, te quiero conmigo. - Toradora!",
-    "Eres la magia que necesitaba mi vida. - Cardcaptor Sakura",
-    "Cada momento contigo es un tesoro. - Fruits Basket",
-    "Tu amor me hace volar, me hace sentir invencible. - Dragon Ball",
-    "Eres la casualidad más bonita que llegó a mi vida. - Clannad",
-    "Nuestro amor es un sueño hecho realidad. - Sailor Moon",
-    "Eres mi alma gemela, mi complemento perfecto. - Fruits Basket",
-
-    // 41-60: Aventura y Lealtad
-    "Juntos por siempre, incluso si tenemos que robar corazones en el camino. - Pokémon",
-    "Eres mi compañero de aventuras, mi cómplice en todo. - Inuyasha",
-    "Tú eres mi meta. Voy a seguir esforzándome para ser una mejor versión de mí misma. - Pokémon",
-    "Contigo, el mundo es más divertido, más emocionante. - Dragon Ball",
-    "Eres la energía que necesito para ganar todas mis batallas. - Naruto",
-    "Juntos somos invencibles. - Sailor Moon",
-    "Eres la chispa que ilumina mi vida. - Pokémon",
-    "Contigo, cada día es una nueva misión por cumplir. - Sword Art Online",
-    "Eres mi tesoro legendario, único y especial. - One Piece",
-    "Siempre a tu lado, pase lo que pase. - Inuyasha",
-    "Eres la aventura más grande de mi vida. - Dragon Ball",
-    "Contigo, no tengo miedo de explorar lo desconocido. - Sword Art Online",
-    "Eres la guía favorita, la que me ayuda a ser mejor. - Naruto",
-    "Juntos hasta el fin del mundo. - Sailor Moon",
-    "Eres la fuerza que me impulsa a seguir adelante. - Dragon Ball",
-    "Contigo, cada obstáculo es una oportunidad para crecer. - Naruto",
-    "Eres mi amuleto de la suerte, el que me protege. - Cardcaptor Sakura",
-    "Juntos contra viento y marea. - One Piece",
-    "Eres la razón por la que valió la pena esperar. - Violet Evergarden",
-    "Contigo, el futuro es brillante y emocionante. - Dragon Ball",
-
-    // 61-80: Cortas y Directas
-    "Te amo. - Clannad",
-    "Eres mi todo. - Fruits Basket",
-    "Contigo soy feliz. - Toradora!",
-    "Eres mi sol. - Sailor Moon",
-    "Mi vida eres tú. - Naruto",
-    "Te adoro. - Cardcaptor Sakura",
-    "Eres mi sueño. - Inuyasha",
-    "Siempre juntos. - Sword Art Online",
-    "Eres especial. - Fruits Basket",
-    "Te necesito. - Evangelion",
-    "Eres mi refugio. - Naruto",
-    "Mi amor eres tú. - Kimi ni Todoke",
-    "Eres mi magia. - Cardcaptor Sakura",
-    "Contigo todo. - Dragon Ball",
-    "Eres mi vida. - Violet Evergarden",
-    "Te quiero. - Clannad",
-    "Eres mi paz. - Fruits Basket",
-    "Siempre tuyo. - Inuyasha",
-    "Eres mi cielo. - Sailor Moon",
-    "Contigo, amor. - Naruto",
-
-    // 81-100: Destino y Conexión
-    "Nuestras almas están entrelazadas por el destino. - Fruits Basket",
-    "Somos dos mitades de un mismo corazón. - Sailor Moon",
-    "Nuestro amor estaba escrito en las estrellas. - Cardcaptor Sakura",
-    "Estamos destinados a estar juntos. - Inuyasha",
-    "Nuestro amor es un viaje eterno. - Violet Evergarden",
-    "Somos dos almas gemelas destinadas a encontrarse. - Naruto",
-    "Nuestro amor es un lazo que nunca se romperá. - Fruits Basket",
-    "Estamos unidos por el hilo rojo del destino. - Naruto",
-    "Nuestro amor es una historia sin fin. - Inuyasha",
-    "Estamos hechos el uno para el otro. - Clannad",
-    "Nuestro amor es un regalo del universo. - Sailor Moon",
-    "Estamos destinados a brillar juntos. - Dragon Ball",
-    "Nuestro amor es un pacto eterno. - Inuyasha",
-    "Estamos unidos por el amor verdadero. - Violet Evergarden",
-    "Nuestro amor es un milagro. - Clannad",
-    "Estamos destinados a ser felices. - Fruits Basket",
-    "Nuestro amor es un tesoro. - One Piece",
-    "Estamos unidos por la eternidad. - Naruto",
-    "Nuestro amor es un sueño eterno. - Sailor Moon",
-    "Estamos destinados a amarnos siempre. - Fruits Basket"
+    "«En todas las galaxias posibles, siempre elegiría orbitar a tu alrededor.»",
+    "«Nuestras almas están hechas de la misma materia estelar.»",
+    "«Si el universo es infinito, mi amor por ti es su medida.»",
+    "«Eres mi constelación favorita en el inmenso cielo nocturno.»",
+    "«Incluso si el sol se apagara, tu sonrisa seguiría iluminando mi mundo.»",
+    "«Somos dos estrellas fugaces que tuvieron la suerte de colisionar.»",
+    "«Cada uno de nuestros latidos es un eco en la inmensidad del espacio.»",
+    "«Descubrí que la eternidad existe en el milisegundo en que te miro a los ojos.»",
+    "«No importa las vidas o reencarnaciones, mi alma siempre reconocerá a la tuya.»",
+    "«Contigo, el caos del universo de repente cobra perfecto sentido.»",
+    "«Eres la gravedad que me mantiene con los pies en la tierra y el corazón en el cielo.»",
+    "«Si la luz tarda años en viajar, mi amor llegó a ti antes de que las estrellas nacieran.»",
+    "«Estar a tu lado es como descubrir un planeta nuevo: lleno de maravillas y sin explorar.»",
+    "«Tus ojos tienen el brillo exacto de mil galaxias naciendo.»",
+    "«Incluso en el vacío del espacio, sentiría el magnetismo de tu corazón.»",
+    "«Tú y yo: un Big Bang de emociones que creó nuestro propio universo.»",
+    "«De todas las casualidades del cosmos, encontrarte fue mi mejor destino.»",
+    "«No necesito telescopios; toda la belleza del universo está frente a mí cuando sonríes.»",
+    "«Eres la estrella polar que guía mi barco a puerto seguro.»",
+    "«Nuestro amor es más antiguo que el polvo de estrellas del que estamos hechos.»"
 ];
 
-// --- 3. FUNCIONES DE CARGA Y GESTIÓN DE FRASES ---
 function iniciarCicloFrases() {
     const contenedor = document.getElementById('background-phrases');
-    if(!contenedor) return;
+    if (!contenedor) return;
 
     const anchoPantalla = window.innerWidth;
     const altoPantalla = window.innerHeight;
-    const esMovil = anchoPantalla < 600;
 
-    // Seleccionar 20 frases al azar de la lista total
-    const frasesSeleccionadas = frasesDeFondo
-        .sort(() => 0.5 - Math.random())
-        .slice(0, 13);
+    // Crear 8 frases estáticas iniciales (menos qty para elegancia)
+    for (let i = 0; i < 8; i++) {
+        crearFraseFlotante(contenedor, anchoPantalla, altoPantalla);
+    }
 
-    let rectsOcupados = [];
-
-    // Crear y posicionar las 20 frases inicialmente
-    frasesSeleccionadas.forEach(texto => {
-        const span = document.createElement('span');
-        span.className = 'bg-phrase';
-        span.innerText = texto;
-        contenedor.appendChild(span);
-
-        // Ajustar tamaños según dispositivo
-        const anchoFrase = span.offsetWidth + (esMovil ? 20 : 40);
-        const altoFrase = span.offsetHeight + (esMovil ? 20 : 40);
-
-        let posValida = false;
-        let intentos = 0;
-        let x, y;
-        
-        // Áreas seguras para no tapar el centro (más restrictivo)
-        const margenX = esMovil ? 0.4 : 0.3; 
-        const margenY = esMovil ? 0.35 : 0.25;
-
-        while (!posValida && intentos < 200) {
-            x = Math.random() * (anchoPantalla - anchoFrase);
-            y = Math.random() * (altoPantalla - altoFrase);
-
-            const enCentroX = x > anchoPantalla * (0.5 - margenX) && x < anchoPantalla * (0.5 + margenX);
-            const enCentroY = y > altoPantalla * (0.5 - margenY) && y < altoPantalla * (0.5 + margenY);
-
-            if (!(enCentroX && enCentroY)) {
-                const colision = rectsOcupados.some(r => {
-                    return !(x + anchoFrase < r.x || x > r.x + r.w || y + altoFrase < r.y || y > r.y + r.h);
-                });
-
-                if (!colision) {
-                    posValida = true;
-                    rectsOcupados.push({ x: x, y: y, w: anchoFrase, h: altoFrase });
-                }
-            }
-            intentos++;
-        }
-
-        if (posValida) {
-            const rotacion = (Math.random() - 0.5) * (esMovil ? 10 : 20);
-            span.style.left = `${x}px`;
-            span.style.top = `${y}px`;
-            span.style.transform = `rotate(${rotacion}deg)`;
-            span.style.opacity = "1"; // Visibles inicialmente
-        } else {
-            span.remove(); 
-        }
-    });
-
-    // Efecto de cambio automático cada 15 segundos
+    // Cambiar una frase cada 8 segundos
     setInterval(() => {
         const frasesActuales = contenedor.querySelectorAll('.bg-phrase');
-        if (frasesActuales.length === 0) return;
+        if (frasesActuales.length > 0) {
+            const fraseAModificar = frasesActuales[Math.floor(Math.random() * frasesActuales.length)];
+            fraseAModificar.classList.remove('show-phrase');
 
-        // Seleccionar una frase al azar para cambiar
-        const indiceAleatorio = Math.floor(Math.random() * frasesActuales.length);
-        const fraseAModificar = frasesActuales[indiceAleatorio];
-
-        // Efecto desaparición (basado en transición CSS)
-        fraseAModificar.style.opacity = "0";
-
-        // Esperar a que desaparezca, cambiar texto y reaparecer
-        setTimeout(() => {
-            const nuevaFrase = frasesDeFondo[Math.floor(Math.random() * frasesDeFondo.length)];
-            fraseAModificar.innerText = nuevaFrase;
-            fraseAModificar.style.opacity = "1";
-        }, 1000); // Duración de la transición de opacidad
-
-    }, 10000); // 15 segundos
+            setTimeout(() => {
+                fraseAModificar.remove();
+                crearFraseFlotante(contenedor, anchoPantalla, altoPantalla);
+            }, 2000);
+        }
+    }, 8000);
 }
 
-// --- 4. CORAZONES FONDO (Lluvia) ---
-function crearCorazon() {
-    // Límite de corazones para no saturar la CPU
-    if (document.querySelectorAll('.corazon-flotante').length > 50) return;
+function crearFraseFlotante(contenedor, anchoPantalla, altoPantalla) {
+    const span = document.createElement('span');
+    span.className = 'bg-phrase';
+    span.innerText = frasesDeFondo[Math.floor(Math.random() * frasesDeFondo.length)];
+    contenedor.appendChild(span);
+
+    const margin = 100;
+    const width = 250; // Estimated max width
+    const height = 80; // Estimated max height
+
+    let posValida = false;
+    let intentos = 0;
+    let x, y;
+
+    // Collision Check Loop
+    while (!posValida && intentos < 50) {
+        x = margin + Math.random() * (anchoPantalla - margin * 2 - width);
+        y = margin + Math.random() * (altoPantalla - margin * 2 - height);
+
+        posValida = true;
+        const existentes = contenedor.querySelectorAll('.bg-phrase');
+        for (let el of existentes) {
+            if (el === span) continue;
+
+            const ex = parseFloat(el.style.left) || 0;
+            const ey = parseFloat(el.style.top) || 0;
+
+            // Check intersection logic
+            if (x < ex + width && x + width > ex && y < ey + height && y + height > ey) {
+                posValida = false;
+                break;
+            }
+        }
+        intentos++;
+    }
+
+    span.style.left = `${x}px`;
+    span.style.top = `${y}px`;
+
+    // Smooth reveal
+    setTimeout(() => {
+        span.classList.add('show-phrase');
+    }, 100);
+}
+
+// --- 5. PARTÍCULAS DE CORAZÓN (Fondo) ---
+function crearParticulaCorazon() {
+    const container = document.getElementById('particles-container');
+    if (!container || document.querySelectorAll('.particle-heart').length > 30) return;
 
     const corazon = document.createElement('div');
-    corazon.innerHTML = '❤️';
-    corazon.className = 'corazon-flotante';
-    
-    // Posición inicial: aleatoria en ancho, justo arriba de la pantalla
-    corazon.style.left = Math.random() * 100 + 'vw';
-    corazon.style.top = '-5vh';
-    
-    // Tamaño aleatorio para dar profundidad
-    corazon.style.fontSize = (Math.random() * 15 + 10) + 'px';
-    
-    // Duración de caída aleatoria (entre 8s y 15s)
-    const duracion = Math.random() * 7 + 8;
-    corazon.style.animationDuration = duracion + 's';
-    
-    document.body.appendChild(corazon);
+    corazon.innerHTML = '✨'; // Corazones o brillos
+    if (Math.random() > 0.5) corazon.innerHTML = '❤️';
 
-    // Eliminar el elemento después de que termine la animación
+    corazon.className = 'particle-heart';
+    corazon.style.left = Math.random() * 100 + 'vw';
+
+    const size = Math.random() * 10 + 5;
+    corazon.style.fontSize = size + 'px';
+
+    const duracion = Math.random() * 15 + 15; // 15s to 30s fall
+    corazon.style.animationDuration = duracion + 's';
+
+    container.appendChild(corazon);
+
     setTimeout(() => {
         corazon.remove();
     }, duracion * 1000);
 }
+setInterval(crearParticulaCorazon, 800);
 
-// Crear un corazón nuevo cada 400ms
-setInterval(crearCorazon, 400);
+// --- 6. MÚSICA & AUDIO VISUALIZER ---
+let audioContext;
+let audioSource;
+let analyser;
+let isAudioInitialized = false;
 
-// --- 5. MÚSICA Y MODAL ---
+function iniciarAudioVisualizer() {
+    if (isAudioInitialized) return;
+
+    const audio = document.getElementById('miMusica');
+    const canvas = document.getElementById('audio-visualizer');
+    if (!audio || !canvas) return;
+
+    try {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        audioContext = new AudioContext();
+        audioSource = audioContext.createMediaElementSource(audio);
+        analyser = audioContext.createAnalyser();
+
+        audioSource.connect(analyser);
+        analyser.connect(audioContext.destination);
+
+        analyser.fftSize = 64; // Bajo para mejor rendimiento (32 bins)
+        const bufferLength = analyser.frequencyBinCount;
+        const dataArray = new Uint8Array(bufferLength);
+
+        const ctx = canvas.getContext('2d');
+        canvas.width = 140;
+        canvas.height = 140;
+
+        function renderFrame() {
+            requestAnimationFrame(renderFrame);
+            const musicBtn = document.getElementById('music-container');
+
+            if (audio.paused) {
+                if (musicBtn) {
+                    musicBtn.style.transform = 'scale(1)';
+                    musicBtn.style.transition = 'transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+                }
+                return; // Cleanup drawing cycles when paused
+            }
+
+            analyser.getByteFrequencyData(dataArray);
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+            const radius = 35; // Size of the button roughly
+
+            // Bass calc for pumping button effect
+            let bassSum = 0;
+            for (let i = 0; i < 3; i++) bassSum += dataArray[i];
+            let bassAvg = bassSum / 3;
+            let scaleBase = 1 + (bassAvg / 255) * 0.15; // Scale up to 1.15x
+            if (musicBtn) {
+                musicBtn.style.transition = 'transform 0.05s ease-out';
+                musicBtn.style.transform = `scale(${scaleBase})`;
+            }
+
+            ctx.lineWidth = 3;
+            ctx.lineCap = 'round';
+            const usableBins = 24; // Usable half ring
+
+            for (let i = 0; i < usableBins; i++) {
+                const value = dataArray[i];
+                const percent = value / 255;
+                const barHeight = Math.max(2, percent * 30); // Max 30px
+
+                // Color gradient based on intensity
+                const r = 255;
+                const g = 77 + percent * 100;
+                const b = 133 + percent * 100;
+
+                ctx.strokeStyle = `rgba(${r}, ${g}, ${b}, ${0.4 + percent * 0.6})`;
+                ctx.shadowBlur = 10;
+                ctx.shadowColor = `rgba(${r}, ${g}, ${b}, 0.8)`;
+
+                // Draw mirrored sides
+                // Right side
+                const angleR = (i * Math.PI) / usableBins - Math.PI / 2;
+                drawBar(angleR, barHeight);
+
+                if (i > 0) {
+                    // Left side
+                    const angleL = (-i * Math.PI) / usableBins - Math.PI / 2;
+                    drawBar(angleL, barHeight);
+                }
+            }
+
+            function drawBar(angle, height) {
+                // start slightly outside button to avoid overlap with border
+                const x1 = centerX + Math.cos(angle) * (radius + 2);
+                const y1 = centerY + Math.sin(angle) * (radius + 2);
+                const x2 = centerX + Math.cos(angle) * (radius + 2 + height);
+                const y2 = centerY + Math.sin(angle) * (radius + 2 + height);
+
+                ctx.beginPath();
+                ctx.moveTo(x1, y1);
+                ctx.lineTo(x2, y2);
+                ctx.stroke();
+            }
+        }
+
+        renderFrame();
+        isAudioInitialized = true;
+    } catch (e) {
+        console.error("Audio Context Init error: ", e);
+    }
+}
+
 function toggleMusica() {
     const musica = document.getElementById('miMusica');
     const icono = document.getElementById('music-icon');
     const contenedor = document.getElementById('music-container');
 
     if (musica.paused) {
-        musica.play().catch(e => console.log("Esperando interacción..."));
+        musica.play().then(() => {
+            // Must be called after user interaction
+            iniciarAudioVisualizer();
+            if (audioContext && audioContext.state === 'suspended') {
+                audioContext.resume();
+            }
+        }).catch(e => console.log("Esperando interacción..."));
+
         icono.innerText = '🎵';
         contenedor.classList.add('playing');
+
+        // Clear canvas if paused previously
+        const canvas = document.getElementById('audio-visualizer');
+        if (canvas) {
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
     } else {
         musica.pause();
         icono.innerText = '🔇';
@@ -262,24 +334,52 @@ function toggleMusica() {
     }
 }
 
-// MODAL CON CONFETI
-function abrirCarta() {
-    document.getElementById('modal-carta').style.display = 'flex';
+// --- 7. ENVELOPE (CARTA FÍSICA) ---
+let isEnvelopeOpen = false;
 
-    confetti({
-        particleCount: 100,
-        spread: 70,
-        origin: { y: 0.3 }, // Ajustamos el origen un poco más arriba
-        colors: ['#ff4d4d', '#c9184a', '#ffb3b3'],
-        shapes: ['heart'],
-        scalar: 1.5,
-        zIndex: 10000 // Forzamos z-index aquí también por seguridad
-    });
+function abrirSobre() {
+    const envelope = document.getElementById('envelope');
+    const btnCerrar = document.getElementById('btn-cerrar-sobre');
+
+    if (!isEnvelopeOpen) {
+        // Step 1: Open Flap
+        envelope.classList.add('open');
+        isEnvelopeOpen = true;
+
+        // Shoot Confetti
+        setTimeout(() => {
+            confetti({
+                particleCount: 150,
+                spread: 100,
+                origin: { y: 0.6 },
+                colors: ['#ff4d85', '#8b3dff', '#ffffff'],
+                zIndex: 10000
+            });
+        }, 600);
+
+        // Step 2: Pop out and expand letter for reading
+        setTimeout(() => {
+            envelope.classList.add('read-mode');
+            if (btnCerrar) btnCerrar.style.display = 'inline-flex';
+        }, 1500);
+    }
 }
 
-function cerrarCarta() { document.getElementById('modal-carta').style.display = 'none'; }
+function cerrarSobre() {
+    const envelope = document.getElementById('envelope');
+    const btnCerrar = document.getElementById('btn-cerrar-sobre');
 
-// --- 6. CONTADOR DE TIEMPO ---
+    // Reverse Steps
+    envelope.classList.remove('read-mode');
+    if (btnCerrar) btnCerrar.style.display = 'none';
+
+    setTimeout(() => {
+        envelope.classList.remove('open');
+        isEnvelopeOpen = false;
+    }, 800);
+}
+
+// --- 8. CONTADOR DE TIEMPO ---
 function actualizarContador() {
     const fechaInicio = new Date("2024-07-21T00:00:00");
     const ahora = new Date();
@@ -290,57 +390,51 @@ function actualizarContador() {
     const minutos = Math.floor((dif % (1000 * 60 * 60)) / (1000 * 60));
 
     const elemento = document.getElementById('tiempo-transcurrido');
-    if(elemento) {
-        elemento.innerText = `${dias}d ${horas}h ${minutos}m juntos ❤️`;
+    if (elemento) {
+        elemento.innerText = `${dias}d ${horas}h ${minutos}m juntos ✨`;
     }
 }
 
-// --- 7. CLICK CORAZONES ---
+// --- 9. CLICK BURST EFFECT ---
 document.addEventListener('click', (e) => {
-    // Evitar corazones si se hace click en el boton de musica
-    if(e.target.closest('.music-control')) return;
+    if (e.target.closest('.action-btn') || e.target.closest('.music-control')) return;
 
-    const clickCorazon = document.createElement('div');
-    clickCorazon.innerHTML = '❤️';
-    clickCorazon.style.position = 'fixed';
-    clickCorazon.style.left = (e.clientX - 10) + 'px';
-    clickCorazon.style.top = (e.clientY - 10) + 'px';
-    clickCorazon.style.fontSize = '20px';
-    clickCorazon.style.pointerEvents = 'none';
-    clickCorazon.style.zIndex = '9999';
-    clickCorazon.style.animation = 'floatUp 1s ease-out forwards';
-    document.body.appendChild(clickCorazon);
-    
-    setTimeout(() => clickCorazon.remove(), 1000);
+    const burst = document.createElement('div');
+    burst.innerHTML = '✨';
+    burst.style.position = 'fixed';
+    burst.style.left = (e.clientX - 10) + 'px';
+    burst.style.top = (e.clientY - 10) + 'px';
+    burst.style.fontSize = '20px';
+    burst.style.pointerEvents = 'none';
+    burst.style.zIndex = '9999';
+    burst.style.animation = 'clickPop 0.8s ease-out forwards';
+    document.body.appendChild(burst);
+
+    setTimeout(() => burst.remove(), 800);
 });
 
-// --- 8. INICIALIZACIÓN ---
-window.onload = () => {
-    iniciarCicloFrases(); // <--- LLAMADA MODIFICADA
-    actualizarContador();
-    setInterval(actualizarContador, 1000); 
+// Create CSS for clickPop dynamically
+const style = document.createElement('style');
+style.innerHTML = `
+@keyframes clickPop {
+    0% { transform: scale(0.5); opacity: 1; }
+    100% { transform: scale(2) translateY(-20px); opacity: 0; }
+}`;
+document.head.appendChild(style);
 
-    // Ocultar preloader
-    setTimeout(() => {
-        const loader = document.getElementById('preloader');
-        if(loader) {
-            loader.style.opacity = '0';
-            setTimeout(() => loader.style.display = 'none', 500);
-        }
-    }, 2000);
-};
 
-// --- 9. LIGHTBOX FOTOS ---
-document.querySelectorAll('.polaroid').forEach(item => {
-    item.addEventListener('click', function() {
+// --- 10. LIGHTBOX FOTOS ---
+document.querySelectorAll('.polaroid-inner').forEach((item) => {
+    item.addEventListener('click', function () {
+        // En dispositivo móvil el tilt detiene clicks simples a veces, esto ayuda
         const imgPath = this.querySelector('img').src;
         const captionText = this.querySelector('.caption').innerText;
-        
+
         const lightbox = document.getElementById('lightbox');
         const lightboxImg = document.getElementById('lightbox-img');
         const lightboxCap = document.getElementById('lightbox-caption');
-        
-        if(lightbox && lightboxImg && lightboxCap) {
+
+        if (lightbox && lightboxImg && lightboxCap) {
             lightboxImg.src = imgPath;
             lightboxCap.innerText = captionText;
             lightbox.classList.add('active');
@@ -348,47 +442,233 @@ document.querySelectorAll('.polaroid').forEach(item => {
     });
 });
 
-// Cerrar lightbox al hacer clic en él
-document.getElementById('lightbox')?.addEventListener('click', function() {
+document.getElementById('lightbox')?.addEventListener('click', function () {
     this.classList.remove('active');
 });
 
-// --- EASTER EGG: Corazón en Foto Especial ---
+// --- EASTER EGG (Opcional, Foto Especial) ---
 const specialPhoto = document.getElementById('special-photo');
-
 if (specialPhoto) {
-    // Escuchar click (PC) y touchstart (Celular)
-    specialPhoto.addEventListener('click', showSecretHeart);
-    specialPhoto.addEventListener('touchstart', showSecretHeart);
+    specialPhoto.parentElement.addEventListener('dblclick', (e) => {
+        e.preventDefault();
+        confetti({
+            particleCount: 100,
+            spread: 70,
+            origin: { x: e.clientX / window.innerWidth, y: e.clientY / window.innerHeight },
+            shapes: ['heart']
+        });
+    });
 }
 
-function showSecretHeart(e) {
-    // Evita comportamientos extraños en celular y el comportamiento por defecto
-    e.preventDefault(); 
-    
-    // Crear el corazón
-    const heart = document.createElement('div');
-    heart.innerText = "❤️";
-    heart.style.position = 'fixed';
-    heart.style.top = '50%';
-    heart.style.left = '50%';
-    heart.style.transform = 'translate(-50%, -50%) scale(0)';
-    heart.style.fontSize = '120px';
-    heart.style.zIndex = '999999'; // Muy por encima de todo
-    heart.style.transition = 'all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
-    heart.style.pointerEvents = 'none'; // Para que no bloquee clicks
-    heart.style.textShadow = '0 0 20px rgba(255, 0, 0, 0.5)';
-    
-    document.body.appendChild(heart);
-    
-    // Animación de aparición (efecto pop)
+// --- 11. INTERACTIVE CONSTELLATIONS (CANVAS) ---
+function initConstellations() {
+    const canvas = document.getElementById('constellation-canvas');
+    if (!canvas) return;
+
+    // Disable on small devices for performance
+    if (window.innerWidth < 768) return;
+
+    const ctx = canvas.getContext('2d');
+    let width, height;
+    let particles = [];
+
+    function resize() {
+        width = window.innerWidth;
+        height = window.innerHeight;
+        canvas.width = width;
+        canvas.height = height;
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    class Particle {
+        constructor() {
+            this.x = Math.random() * width;
+            this.y = Math.random() * height;
+            this.vx = (Math.random() - 0.5) * 0.5;
+            this.vy = (Math.random() - 0.5) * 0.5;
+            this.radius = Math.random() * 1.5 + 0.5;
+        }
+        update() {
+            this.x += this.vx;
+            this.y += this.vy;
+
+            if (this.x < 0 || this.x > width) this.vx *= -1;
+            if (this.y < 0 || this.y > height) this.vy *= -1;
+        }
+        draw() {
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
+            ctx.fill();
+        }
+    }
+
+    for (let i = 0; i < 80; i++) particles.push(new Particle());
+
+    function animate() {
+        requestAnimationFrame(animate);
+        ctx.clearRect(0, 0, width, height);
+
+        // Update and draw
+        particles.forEach(p => {
+            p.update();
+            p.draw();
+        });
+
+        // Draw connections (Constellations)
+        const connectionDistance = 120;
+        const mouseConnectionDistance = 180;
+
+        for (let i = 0; i < particles.length; i++) {
+            // Check connection to mouse
+            const dx = mouseX - particles[i].x;
+            const dy = mouseY - particles[i].y;
+            const distMouse = Math.sqrt(dx * dx + dy * dy);
+
+            if (distMouse < mouseConnectionDistance) {
+                ctx.beginPath();
+                ctx.strokeStyle = `rgba(255, 77, 133, ${1 - distMouse / mouseConnectionDistance})`; // Nebula Pink
+                ctx.lineWidth = 1;
+                ctx.moveTo(particles[i].x, particles[i].y);
+                ctx.lineTo(mouseX, mouseY);
+                ctx.stroke();
+            }
+
+            // Check connection between particles
+            for (let j = i + 1; j < particles.length; j++) {
+                const dx2 = particles[i].x - particles[j].x;
+                const dy2 = particles[i].y - particles[j].y;
+                const dist2 = Math.sqrt(dx2 * dx2 + dy2 * dy2);
+
+                if (dist2 < connectionDistance) {
+                    ctx.beginPath();
+                    ctx.strokeStyle = `rgba(255, 255, 255, ${(1 - dist2 / connectionDistance) * 0.3})`;
+                    ctx.lineWidth = 0.5;
+                    ctx.moveTo(particles[i].x, particles[i].y);
+                    ctx.lineTo(particles[j].x, particles[j].y);
+                    ctx.stroke();
+                }
+            }
+        }
+    }
+    animate();
+}
+
+// --- INICIALIZACIÓN GENERAL ---
+window.onload = () => {
+    iniciarCicloFrases();
+    actualizarContador();
+    initConstellations();
+
+    setInterval(actualizarContador, 10000); // 10s avoids constant reflow
+
+    // Ocultar preloader después de animación de SVG (3.5s approx total)
     setTimeout(() => {
-        heart.style.transform = 'translate(-50%, -50%) scale(1)';
-    }, 10);
-    
-    // Desaparición y eliminación
+        const preloader = document.getElementById('preloader');
+        if (preloader) {
+            preloader.style.opacity = '0';
+            setTimeout(() => preloader.style.display = 'none', 1000);
+        }
+    }, 3500);
+};
+
+// --- 12. EASTER EGG (SECRET CODE "MI CIELO") ---
+let secretCode = "micielo";
+let inputBuffer = "";
+
+window.addEventListener("keydown", (e) => {
+    // Ignore typing in inputs if there were any
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+
+    // Match only letters
+    if (e.key.length === 1 && e.key.match(/[a-zA-Z]/)) {
+        inputBuffer += e.key.toLowerCase();
+
+        // Keep string length capped
+        if (inputBuffer.length > secretCode.length) {
+            inputBuffer = inputBuffer.substring(inputBuffer.length - secretCode.length);
+        }
+
+        // Match found!
+        if (inputBuffer === secretCode) {
+            triggerEasterEgg();
+            inputBuffer = ""; // Reset limit
+        }
+    }
+});
+
+function triggerEasterEgg() {
+    // 1. Epic Confetti Explosion (Sides to center)
+    const duration = 5000;
+    const end = Date.now() + duration;
+
+    (function frame() {
+        // Left Cannon
+        confetti({
+            particleCount: 7,
+            angle: 60,
+            spread: 55,
+            origin: { x: 0, y: 0.8 },
+            colors: ['#ff4d85', '#ffd700', '#ffffff', '#4a154b']
+        });
+        // Right Cannon
+        confetti({
+            particleCount: 7,
+            angle: 120,
+            spread: 55,
+            origin: { x: 1, y: 0.8 },
+            colors: ['#ff4d85', '#ffd700', '#ffffff', '#4a154b']
+        });
+
+        if (Date.now() < end) {
+            requestAnimationFrame(frame);
+        }
+    }());
+
+    // 2. Magical Floating Text Overlay
+    const overlay = document.createElement("div");
+    overlay.innerHTML = "✨ ¡Hola Mi Cielo! ✨<br><span style='font-size:2rem; font-family: var(--font-heading)'>El universo conspiró para que nos encontraramos.</span>";
+    overlay.style.position = "fixed";
+    overlay.style.top = "50%";
+    overlay.style.left = "50%";
+    overlay.style.width = "100%";
+    overlay.style.textAlign = "center";
+    overlay.style.transform = "translate(-50%, -50%) scale(0)";
+    overlay.style.color = "var(--starlight)";
+    overlay.style.fontFamily = "var(--font-script)";
+    overlay.style.fontSize = "6rem";
+    overlay.style.lineHeight = "1.2";
+    overlay.style.textShadow = "0 0 20px var(--nebula-pink), 0 0 50px var(--nebula-purple), 0 0 80px rgba(255,255,255,0.8)";
+    overlay.style.zIndex = "9999";
+    overlay.style.pointerEvents = "none";
+    overlay.style.transition = "transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 1.5s";
+
+    // Mobile adjust
+    if (window.innerWidth < 768) {
+        overlay.style.fontSize = "3.5rem";
+    }
+
+    document.body.appendChild(overlay);
+
+    // Animate In Text
     setTimeout(() => {
-        heart.style.transform = 'translate(-50%, -50%) scale(0)';
-        setTimeout(() => heart.remove(), 600);
-    }, 1800);
+        overlay.style.transform = "translate(-50%, -50%) scale(1)";
+    }, 100);
+
+    // 3. Background pulse zoom
+    const bg = document.getElementById("cosmic-bg");
+    if (bg) {
+        bg.style.transition = "transform 3s ease";
+        bg.style.transform = "scale(1.15)";
+    }
+
+    // Fade Out & Remove
+    setTimeout(() => {
+        overlay.style.opacity = "0";
+        if (bg) {
+            bg.style.transform = "scale(1)";
+        }
+        setTimeout(() => overlay.remove(), 1500);
+    }, 5500);
 }
