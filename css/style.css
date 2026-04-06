@@ -1,13 +1,14 @@
 :root {
-    /* Cosmic Palette */
-    --space-dark: #070814;
-    --space-light: #12142B;
+    /* Spring Palette */
+    --space-dark: #87CEEB; /* Sky blue */
+    --space-light: #F0FBFF; /* Light clear sky */
     --starlight: #ffffff;
-    --nebula-pink: #ff4d85;
-    --nebula-purple: #8b3dff;
-    --rose-gold: #b76e79;
-    --glass-bg: rgba(18, 20, 43, 0.4);
-    --glass-border: rgba(255, 255, 255, 0.1);
+    --nebula-pink: #FF85A1; /* Bright pink */
+    --nebula-purple: #FBB02D; /* Warm yellow */
+    --rose-gold: #324B4C; /* Dark greenish blue for text */
+    --glass-bg: rgba(255, 255, 255, 0.4);
+    --glass-border: rgba(255, 255, 255, 0.8);
+    --text-color: #2c3e50;
     
     /* Typography */
     --font-heading: 'Dancing Script', cursive;
@@ -28,8 +29,8 @@ html {
 body {
     margin: 0;
     padding: 0;
-    background-color: var(--space-dark);
-    color: var(--starlight);
+    background-color: var(--space-light);
+    color: var(--text-color);
     font-family: var(--font-body);
     overflow-x: hidden;
     position: relative;
@@ -44,14 +45,28 @@ a, button, .polaroid, .music-control, #envelope {
 #cursor {
     position: fixed;
     top: 0; left: 0;
-    width: 10px; height: 10px;
-    background: var(--starlight);
-    border-radius: 50%;
+    width: 24px; height: 24px;
     transform: translate(-50%, -50%);
     pointer-events: none;
     z-index: 10000;
-    box-shadow: 0 0 10px var(--starlight), 0 0 20px var(--nebula-pink);
-    transition: width 0.3s, height 0.3s, background 0.3s;
+    transition: width 0.3s, height 0.3s;
+    background: transparent;
+    box-shadow: none;
+}
+
+.butterfly {
+    font-size: 32px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%; height: 100%;
+    animation: flutter 0.15s infinite alternate ease-in-out;
+    filter: drop-shadow(0 0 10px rgba(255, 77, 133, 0.6));
+}
+
+@keyframes flutter {
+    from { transform: rotate(-20deg) scale(0.9); }
+    to { transform: rotate(20deg) scale(1.1); }
 }
 
 #cursor-blur {
@@ -67,57 +82,59 @@ a, button, .polaroid, .music-control, #envelope {
 }
 
 /* Cursor states */
-.cursor-hover {
-    width: 20px !important;
-    height: 20px !important;
-    background: transparent !important;
-    border: 2px solid var(--nebula-pink);
-    box-shadow: none !important;
+.cursor-hover .butterfly {
+    transform: scale(1.5) !important;
+    animation-duration: 0.05s !important;
+    filter: drop-shadow(0 0 20px rgba(255, 77, 133, 1));
 }
 
-/* --- Cosmic Background (Pure CSS Stars) --- */
+/* --- Background & Dynamic Clouds --- */
 #cosmic-bg {
     position: fixed;
     top: 0; left: 0; width: 100%; height: 100%;
-    background: radial-gradient(ellipse at bottom, var(--space-light) 0%, var(--space-dark) 100%);
+    /* Dreamy Morning Spring Sky */
+    background: linear-gradient(to bottom, #7fc1eb 0%, #b8e0f5 40%, #e1f4fc 70%, #ffefea 100%);
     z-index: -2;
     overflow: hidden;
 }
 
-/* Background styles setup */
-
-#stars, #stars2, #stars3 {
+#clouds-container {
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    width: 100%;
-    height: 100%;
-    display: block;
-    background: transparent;
+    width: 100%; height: 100%;
+    overflow: hidden;
 }
 
-/* We will inject shadows via JS or keep it simple with background images */
-#stars {
-    background: transparent url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600"><circle cx="400" cy="300" r="1" fill="white" opacity="0.8"/></svg>') repeat;
-    background-size: 200px 200px;
-    animation: animStar 50s linear infinite;
-}
-#stars2 {
-    background: transparent url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600"><circle cx="200" cy="150" r="1.5" fill="white" opacity="0.6"/></svg>') repeat;
-    background-size: 300px 300px;
-    animation: animStar 100s linear infinite;
-}
-#stars3 {
-    background: transparent url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600"><circle cx="600" cy="450" r="2" fill="%23ff4d85" opacity="0.5"/></svg>') repeat;
-    background-size: 400px 400px;
-    animation: animStar 150s linear infinite;
+.cloud-puff {
+    position: absolute;
+    background: #ffffff;
+    border-radius: 100px;
+    box-shadow: inset 0 -5px 15px rgba(0,0,0,0.03), 0 10px 20px rgba(0,0,0,0.05); /* Soft puffy volumetric lighting */
+    filter: blur(2px);
+    opacity: 0.8;
 }
 
-@keyframes animStar {
-    from { transform: translateY(0px); }
-    to { transform: translateY(-1000px); }
+.cloud-puff::before, .cloud-puff::after {
+    content: '';
+    position: absolute;
+    background: #ffffff;
+    border-radius: 50%;
+}
+.cloud-puff::before {
+    width: 60%;
+    height: 150%;
+    top: -60%;
+    left: 15%;
+}
+.cloud-puff::after {
+    width: 45%;
+    height: 110%;
+    top: -40%;
+    left: 50%;
+}
+
+@keyframes floatCloud {
+    from { left: 120vw; }
+    to { left: -50vw; }
 }
 
 /* --- Constellation Canvas --- */
@@ -138,7 +155,7 @@ a, button, .polaroid, .music-control, #envelope {
 }
 
 .text-glow {
-    text-shadow: 0 0 10px rgba(255, 77, 133, 0.5), 0 0 20px rgba(255, 77, 133, 0.3);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 /* --- Hero Section --- */
@@ -165,7 +182,7 @@ a, button, .polaroid, .music-control, #envelope {
     font-size: 4rem;
     margin: 0;
     line-height: 1.2;
-    background: linear-gradient(to right, var(--nebula-pink), #ffb3b3, var(--nebula-pink));
+    background: linear-gradient(to right, #ff4c6a, #ffb3b3, #ff4c6a);
     background-size: 200% auto;
     -webkit-background-clip: text;
     background-clip: text;
@@ -253,7 +270,7 @@ a, button, .polaroid, .music-control, #envelope {
 
 .bg-phrase {
     position: absolute;
-    color: rgba(255, 255, 255, 0.15);
+    color: rgba(0, 0, 0, 0.15);
     font-size: 1.1rem;
     max-width: 250px;
     font-style: italic;
@@ -339,7 +356,7 @@ a, button, .polaroid, .music-control, #envelope {
 .titulo-galeria {
     font-family: var(--font-heading);
     font-size: 4.5rem;
-    color: var(--starlight);
+    color: #ff4c6a;
     margin-bottom: 70px;
     text-align: center;
     position: relative;
@@ -464,14 +481,14 @@ a, button, .polaroid, .music-control, #envelope {
 
 .gracias {
     font-size: 3rem;
-    color: #fff;
+    color: #ff4c6a;
     font-family: var(--font-heading);
 }
 
 .nota-final {
     font-family: var(--font-body);
     font-size: 1.2rem;
-    color: #ccc;
+    color: var(--text-color);
     font-weight: 300;
     margin: 20px 0 40px;
 }
@@ -483,7 +500,7 @@ a, button, .polaroid, .music-control, #envelope {
     align-items: center;
     padding: 18px 40px;
     background: transparent;
-    color: var(--starlight);
+    color: var(--text-color);
     font-family: var(--font-body);
     font-weight: 600;
     font-size: 1.1rem;
@@ -618,7 +635,7 @@ a, button, .polaroid, .music-control, #envelope {
     border-radius: 4px;
     padding: 30px;
     box-shadow: 0 0 10px rgba(0,0,0,0.2);
-    transition: transform 0.8s ease, z-index 0.2s, height 0.8s ease, width 0.8s ease, top 0.8s ease, left 0.8s ease;
+    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
     z-index: 3;
     color: #222;
     overflow: hidden; /* Hide text initially */
@@ -638,7 +655,7 @@ a, button, .polaroid, .music-control, #envelope {
 
 #envelope.open .letter {
     transform: translateY(-150px);
-    transition: transform 0.8s 0.6s, z-index 0.2s;
+    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.6s;
     z-index: 10;
 }
 
@@ -653,6 +670,12 @@ a, button, .polaroid, .music-control, #envelope {
     box-shadow: 0 30px 60px rgba(0,0,0,0.6);
     z-index: 20;
     overflow: visible; /* Show all text */
+    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.close-letter-btn:hover {
+    transform: scale(1.2);
+    color: #c9184a !important;
 }
 
 .titulo-carta { font-family: var(--font-heading); color: #c9184a; font-size: 2.2rem; margin-top: 0; margin-bottom: 15px;}
@@ -683,34 +706,53 @@ a, button, .polaroid, .music-control, #envelope {
     transition: opacity 1s ease, visibility 1s;
 }
 
-.heart-draw-container {
-    width: 60px;
-    height: 60px;
+.flower-draw-container {
+    width: 100px;
+    height: 100px;
     margin-bottom: 20px;
 }
 
-.heart-svg {
+.flower-svg {
     width: 100%;
     height: 100%;
-    fill: transparent;
-    stroke: var(--nebula-pink);
-    stroke-width: 15;
-    stroke-dasharray: 1600;
-    stroke-dashoffset: 1600;
-    animation: drawHeart 2s ease forwards, pulse 1.5s 2s infinite alternate;
+    overflow: visible;
 }
 
-@keyframes drawHeart {
-    to { stroke-dashoffset: 0; fill: rgba(255, 77, 133, 0.3); }
+/* Flower Animations */
+.flower-svg .stem {
+    stroke-dasharray: 40;
+    stroke-dashoffset: 40;
+    animation: growStem 1.2s ease-out forwards;
 }
-@keyframes pulse {
-    from { transform: scale(1); filter: drop-shadow(0 0 5px var(--nebula-pink)); }
-    to { transform: scale(1.1); filter: drop-shadow(0 0 20px var(--nebula-pink)); }
+.flower-svg .leaf {
+    stroke-dasharray: 20;
+    stroke-dashoffset: 20;
+    animation: growStem 0.6s 0.6s ease-out forwards;
+}
+.flower-svg .petals {
+    transform-origin: 50px 50px;
+    transform: scale(0);
+    animation: bloomPetals 1s 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+.flower-svg .center {
+    transform-origin: 50px 50px;
+    transform: scale(0);
+    animation: bloomPetals 0.6s 1.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+@keyframes growStem {
+    to { stroke-dashoffset: 0; }
+}
+
+@keyframes bloomPetals {
+    0% { transform: scale(0); }
+    70% { transform: scale(1.1); }
+    100% { transform: scale(1); }
 }
 
 .texto-loader {
     font-family: var(--font-body);
-    color: var(--starlight);
+    color: var(--text-color);
     letter-spacing: 2px;
     text-transform: uppercase;
     font-size: 0.8rem;
@@ -733,10 +775,10 @@ a, button, .polaroid, .music-control, #envelope {
 }
 
 @keyframes floatParticle {
-    0% { transform: translateY(110vh) scale(0.5); opacity: 0; }
-    10% { opacity: 0.6; }
-    90% { opacity: 0.6; }
-    100% { transform: translateY(-10vh) scale(1); opacity: 0; }
+    0% { transform: translateY(-10vh) scale(0.5) rotate(0deg); opacity: 0; }
+    10% { opacity: 0.9; }
+    90% { opacity: 0.9; }
+    100% { transform: translateY(110vh) scale(1) rotate(360deg); opacity: 0; }
 }
 
 /* --- Lightbox --- */
@@ -843,4 +885,32 @@ a, button, .polaroid, .music-control, #envelope {
         bottom: 20px;
         right: 20px;
     }
+}
+
+/* --- Memory Modal --- */
+.modal-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(8px);
+    z-index: 10000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.3s ease, visibility 0.3s;
+}
+.modal-overlay.hidden {
+    opacity: 0;
+    visibility: hidden;
+}
+.modal-overlay .modal-content {
+    background: rgba(255, 252, 248, 0.95);
+    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+    transform: scale(1) translateY(0);
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.modal-overlay.hidden .modal-content {
+    transform: scale(0.8) translateY(20px);
 }

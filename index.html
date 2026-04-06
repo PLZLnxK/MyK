@@ -12,26 +12,32 @@
 </head>
 <body>
     <!-- Custom Cursor -->
-    <div id="cursor"></div>
+    <div id="cursor"><span class="butterfly">🦋</span></div>
     <div id="cursor-blur"></div>
 
     <!-- Cosmic Background -->
     <div id="cosmic-bg">
         <canvas id="constellation-canvas"></canvas>
-        <div id="stars"></div>
-        <div id="stars2"></div>
-        <div id="stars3"></div>
+        <div id="clouds-container"></div>
         <div id="shooting-stars-container"></div>
     </div>
 
     <!-- Preloader -->
     <div id="preloader">
-        <div class="heart-draw-container">
-            <svg class="heart-svg" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
-                <path d="M462.3 62.6C407.5 15.9 326 24.3 275.7 76.2L256 96.5l-19.7-20.3C186.1 24.3 104.5 15.9 49.7 62.6c-62.8 53.6-66.1 149.8-9.9 207.9l193.5 199.8c12.5 12.9 32.8 12.9 45.3 0l193.5-199.8c56.3-58.1 53-154.3-9.8-207.9z"/>
+        <div class="flower-draw-container">
+            <svg class="flower-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <path class="stem" d="M50,90 L50,50" stroke="#77DD77" stroke-width="3" fill="none" stroke-linecap="round" />
+                <path class="leaf" d="M50,70 Q70,70 60,60" stroke="#77DD77" stroke-width="2" fill="none" stroke-linecap="round" />
+                <g class="petals">
+                    <path d="M50,50 C30,30 30,10 50,10 C70,10 70,30 50,50 Z" fill="#FF85A1" />
+                    <path d="M50,50 C70,30 90,30 90,50 C90,70 70,70 50,50 Z" fill="#FF85A1" />
+                    <path d="M50,50 C70,70 70,90 50,90 C30,90 30,70 50,50 Z" fill="#FF85A1" />
+                    <path d="M50,50 C30,70 10,70 10,50 C10,30 30,30 50,50 Z" fill="#FF85A1" />
+                </g>
+                <circle class="center" cx="50" cy="50" r="8" fill="#FBB02D" />
             </svg>
         </div>
-        <p class="texto-loader">Alineando las estrellas...</p>
+        <p class="texto-loader">Esperando a que floresca la primavera...</p>
     </div>
     
     <!-- Floating Counter -->
@@ -41,6 +47,7 @@
 
     <!-- Music Control & Visualizer -->
     <div id="audio-wrapper">
+        <span class="hidden-egg" style="position: absolute; top: -10px; right: 70px; opacity: 0.2; cursor: pointer; font-size: 1.2rem;" onclick="encontrarHuevo(this)">🥚</span>
         <canvas id="audio-visualizer"></canvas>
         <div id="music-container" class="music-control glass-panel" onclick="toggleMusica()">
             <span id="music-icon">🔇</span>
@@ -61,6 +68,7 @@
         </div>
         
         <div class="scroll-indicator">
+            <span class="hidden-egg" style="position: absolute; left: -60px; top: 10px; opacity: 0.2; cursor: pointer; font-size: 1.5rem;" onclick="encontrarHuevo(this)">🥚</span>
             <div class="mouse">
                 <div class="wheel"></div>
             </div>
@@ -74,7 +82,7 @@
 
     <!-- Gallery Section (Timeline) -->
     <section id="galeria" class="full-screen seccion-galeria">
-        <h2 class="titulo-galeria reveal-element text-glow">Nuestras Constelaciones</h2>
+        <h2 class="titulo-galeria reveal-element text-glow">Nuestra Primavera</h2>
         <div class="timeline-container">
             <div class="timeline-line"></div>
             <!-- Photos -->
@@ -209,42 +217,43 @@
             </div>
         </div>
 
-        <div class="mensaje-final reveal-element">
-            <h3 class="gracias text-glow" >Gracias por estos momentos cósmicos ❤️</h3>
-            <p class="nota-final">Cada una de estas fotos es mi galaxia favorita porque tú estás en ella.</p>
-            <a href="https://wa.me/4871387510?text=Te%20amo%20mucho,%20gracias%20por%20la%20sorpresa!" class="btn-final action-btn">
-                <span>Envíame un mensajito ❤️</span>
+        <div class="add-memory-wrapper reveal-element" style="text-align: center; margin: 40px 0;">
+            <button id="btn-add-memory" class="action-btn" onclick="abrirModalMemoria()">
+                <span>Añadir Nuevo Recuerdo 🌸</span>
                 <div class="btn-glow"></div>
-            </a>
+            </button>
+        </div>
+
+        <div class="mensaje-final reveal-element">
+            <h3 class="gracias text-glow" >Gracias por estos momentos tan brillantes 🌸</h3>
+            <p class="nota-final">Cada una de estas fotos es mi paisaje favorito porque tú estás en ella.</p>
         </div>
     </section>
 
     <!-- Letter Section -->
     <div class="seccion-carta reveal-element">
-        <p class="hint-carta">Tengo un último mensaje flotando en el espacio para ti...</p>
+        <p class="hint-carta">Tengo un último mensaje escondido entre las flores para ti...</p>
         
         <!-- Interactive Envelope -->
-        <div class="envelope-wrapper" onclick="abrirSobre()">
+        <div class="envelope-wrapper" onclick="abrirSobre(event)">
             <div id="envelope" class="close">
                 <div class="front flap"></div>
                 <div class="front pocket"></div>
                 <div class="letter">
+                    <button class="close-letter-btn" onclick="cerrarSobre(event)" style="position:absolute; top: 10px; right: 10px; background: transparent; border: none; font-size: 1.5rem; cursor: pointer; color: #4a2b38; z-index: 50;">✖</button>
+                    <span class="hidden-egg" style="position: absolute; top: 10px; right: 40px; opacity: 0.3; cursor: pointer; font-size: 2rem;" onclick="encontrarHuevo(this)">🥚</span>
                     <h2 class="titulo-carta">Para mi persona favorita</h2>
                     <p class="texto-carta">
                         El amor, el amor... nuestro amor... mi niña me haces inmensamente feliz, estar a tu lado es tenerlo todo y a la vez recibir mas y mas. Eres grandiosa, espectacular, todo lo que alguna vez pude soñar.<br><br>
                         Amor mío, mi amor por ti es eterno y absoluto. Nuestras almas ya están entrelazadas por la eternidad; somos un mismo suspiro en la inmensidad del cosmos.<br><br>
-                        "Mi cielo, incluso si el mundo entero se pone en nuestra contra, no me importa, siempre y cuando estés a mi lado. Somos como dos estrellas destinadas a brillar juntas en la inmensidad."
+                        "Mi cielo, incluso si el mundo entero se pone en nuestra contra, no me importa, siempre y cuando estés a mi lado. Somos como dos flores destinadas a florecer juntas bajo el mismo sol de primavera."
                     </p>
-                    <p class="firma">Con todo mi amor, Tu hermoso hombre de chocolate blanco ❤️</p>
+                    <p class="firma">Con todo mi amor, Tu hermoso hombre de chocolate blanco 🌸</p>
                 </div>
                 <!-- Cera del sello -->
-                <div class="wax-seal">❤️</div>
+                <div class="wax-seal">🌸</div>
             </div>
         </div>
-        <button id="btn-cerrar-sobre" class="action-btn" onclick="cerrarSobre()" style="display: none; margin: 40px auto 0;">
-            <span>Guardar Carta</span>
-            <div class="btn-glow"></div>
-        </button>
     </div>
 
     <!-- Lightbox -->
@@ -255,6 +264,31 @@
 
     <!-- Heart Particles Container -->
     <div id="particles-container"></div>
+
+    <!-- Modal para añadir foto -->
+    <div id="modal-memory" class="modal-overlay hidden">
+        <div class="modal-content glass-panel" style="width: 90%; max-width: 400px; padding: 30px; text-align: center; border-radius: 12px; position:relative;">
+            <button onclick="cerrarModalMemoria()" style="position:absolute; top: 10px; right: 15px; background: transparent; border: none; font-size: 1.5rem; cursor: pointer; color: #4a2b38; z-index:10;">✖</button>
+            <h3 style="color: #c9184a; font-family: var(--font-heading); margin-bottom: 20px;">Planta un Nuevo Recuerdo</h3>
+            
+            <label for="memory-upload" class="action-btn" style="padding: 10px 20px; font-size: 1rem; width: 100%; display:inline-block; cursor:pointer; margin-bottom: 20px; box-sizing:border-box;">
+                <span>Seleccionar Imagen 📸</span>
+                <div class="btn-glow"></div>
+                <input type="file" id="memory-upload" accept="image/*" style="opacity: 0; position: absolute; width: 1px; height: 1px; z-index: -1;" onchange="previewMemory(event)">
+            </label>
+            
+            <div id="memory-preview-container" style="display:none; margin-bottom: 20px;">
+                <img id="memory-preview" style="max-width: 100%; max-height: 200px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); object-fit: contain;" />
+            </div>
+
+            <textarea id="memory-caption" placeholder="Escribe un mensajito bonito para esta foto..." style="width: 100%; height: 80px; padding: 10px; border-radius: 8px; border: 1px solid #ffd1dc; margin-bottom: 20px; font-family: var(--font-body); resize: none; background: rgba(255,255,255,0.7); color: #4a2b38; outline: none;"></textarea>
+
+            <button id="btn-save-memory" class="action-btn" onclick="guardarMemoria()" style="width: 100%; opacity: 0.5; cursor: not-allowed;" disabled>
+                <span>Guardar Recuerdo ✨</span>
+                <div class="btn-glow"></div>
+            </button>
+        </div>
+    </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.0/vanilla-tilt.min.js"></script>
     <script src="js/script.js"></script>

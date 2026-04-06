@@ -9,6 +9,12 @@ let mouseY = window.innerHeight / 2;
 document.addEventListener('mousemove', (e) => {
     mouseX = e.clientX;
     mouseY = e.clientY;
+    
+    // Parallax logic for clouds/stars
+    const stars1 = document.getElementById('stars');
+    const stars2 = document.getElementById('stars2');
+    if(stars1) stars1.style.transform = `translate(${mouseX * -0.05}px, ${mouseY * -0.02}px)`;
+    if(stars2) stars2.style.transform = `translate(${mouseX * -0.02}px, ${mouseY * -0.01}px)`;
 });
 
 // Only run cursor logic if on non-touch device
@@ -73,26 +79,25 @@ document.querySelectorAll('.reveal-element').forEach((el) => revealObserver.obse
 
 // --- 4. CONFIGURACIÓN Y FRASES (Románticas/Cósmicas) ---
 const frasesDeFondo = [
-    "«En todas las galaxias posibles, siempre elegiría orbitar a tu alrededor.»",
-    "«Nuestras almas están hechas de la misma materia estelar.»",
-    "«Si el universo es infinito, mi amor por ti es su medida.»",
-    "«Eres mi constelación favorita en el inmenso cielo nocturno.»",
-    "«Incluso si el sol se apagara, tu sonrisa seguiría iluminando mi mundo.»",
-    "«Somos dos estrellas fugaces que tuvieron la suerte de colisionar.»",
-    "«Cada uno de nuestros latidos es un eco en la inmensidad del espacio.»",
-    "«Descubrí que la eternidad existe en el milisegundo en que te miro a los ojos.»",
-    "«No importa las vidas o reencarnaciones, mi alma siempre reconocerá a la tuya.»",
-    "«Contigo, el caos del universo de repente cobra perfecto sentido.»",
-    "«Eres la gravedad que me mantiene con los pies en la tierra y el corazón en el cielo.»",
-    "«Si la luz tarda años en viajar, mi amor llegó a ti antes de que las estrellas nacieran.»",
-    "«Estar a tu lado es como descubrir un planeta nuevo: lleno de maravillas y sin explorar.»",
-    "«Tus ojos tienen el brillo exacto de mil galaxias naciendo.»",
-    "«Incluso en el vacío del espacio, sentiría el magnetismo de tu corazón.»",
-    "«Tú y yo: un Big Bang de emociones que creó nuestro propio universo.»",
-    "«De todas las casualidades del cosmos, encontrarte fue mi mejor destino.»",
-    "«No necesito telescopios; toda la belleza del universo está frente a mí cuando sonríes.»",
-    "«Eres la estrella polar que guía mi barco a puerto seguro.»",
-    "«Nuestro amor es más antiguo que el polvo de estrellas del que estamos hechos.»"
+    "«En cada flor que florece, veo un reflejo de tu sonrisa.»",
+    "«Nuestras almas están hechas de la misma luz de primavera.»",
+    "«Si la primavera es eterna, mi amor por ti es su esencia.»",
+    "«Eres mi flor favorita en este inmenso jardín.»",
+    "«Incluso si el cielo se nubla, tu calidez sigue iluminando mi mundo.»",
+    "«Somos dos semillas que tuvieron la suerte de germinar juntas.»",
+    "«Cada uno de nuestros latidos es un eco en la suave brisa del viento.»",
+    "«Descubrí que la eternidad existe en el instante en que te miro a los ojos.»",
+    "«No importa las estaciones, mi alma siempre florecerá a tu lado.»",
+    "«Contigo, el frío del invierno desaparece por completo.»",
+    "«Eres la luz que hace crecer todos mis sueños.»",
+    "«Tu belleza es aún más deslumbrante que una mañana de abril.»",
+    "«Estar a tu lado es como caminar por un prado lleno de luz.»",
+    "«Tus ojos tienen el brillo exacto del sol de primavera.»",
+    "«Nuestro amor es más fuerte que las raíces del roble más antiguo.»",
+    "«Tú y yo: un jardín inmenso floreciendo al unísono.»",
+    "«De todas las casualidades de la naturaleza, encontrarte fue la más hermosa.»",
+    "«Eres la brújula que guía mi camino en este bosque de la vida.»",
+    "«Contigo cada día es un renacer lleno de colores hermosos.»"
 ];
 
 function iniciarCicloFrases() {
@@ -173,13 +178,38 @@ function crearParticulaCorazon() {
     if (!container || document.querySelectorAll('.particle-heart').length > 30) return;
 
     const corazon = document.createElement('div');
-    corazon.innerHTML = '✨'; // Corazones o brillos
-    if (Math.random() > 0.5) corazon.innerHTML = '❤️';
+    corazon.innerHTML = '🌸'; // Flores o brillos
+    if (Math.random() > 0.5) corazon.innerHTML = '🌼';
 
     corazon.className = 'particle-heart';
     corazon.style.left = Math.random() * 100 + 'vw';
+    corazon.style.cursor = 'pointer';
+    corazon.style.pointerEvents = 'auto'; // allow click
 
-    const size = Math.random() * 10 + 5;
+    corazon.addEventListener('click', function(e) {
+        e.stopPropagation(); // prevent clicking other elements behind
+        for (let i=0; i<4; i++) {
+            const burst = document.createElement('div');
+            burst.innerHTML = '✨';
+            burst.style.position = 'fixed';
+            burst.style.left = this.style.left;
+            burst.style.top = this.getBoundingClientRect().top + 'px';
+            burst.style.fontSize = '14px';
+            burst.style.pointerEvents = 'none';
+            burst.style.zIndex = '9999';
+            const tx = (Math.random() - 0.5) * 120;
+            const ty = (Math.random() - 0.5) * 120;
+            burst.animate([
+                { transform: 'translate(0,0) scale(1)', opacity: 1 },
+                { transform: `translate(${tx}px, ${ty}px) scale(0)`, opacity: 0 }
+            ], { duration: 600, easing: 'ease-out' });
+            document.body.appendChild(burst);
+            setTimeout(() => burst.remove(), 600);
+        }
+        this.remove();
+    });
+
+    const size = Math.random() * 25 + 15;
     corazon.style.fontSize = size + 'px';
 
     const duracion = Math.random() * 15 + 15; // 15s to 30s fall
@@ -337,9 +367,9 @@ function toggleMusica() {
 // --- 7. ENVELOPE (CARTA FÍSICA) ---
 let isEnvelopeOpen = false;
 
-function abrirSobre() {
+function abrirSobre(e) {
+    if (e && e.target.classList.contains('close-letter-btn')) return;
     const envelope = document.getElementById('envelope');
-    const btnCerrar = document.getElementById('btn-cerrar-sobre');
 
     if (!isEnvelopeOpen) {
         // Step 1: Open Flap
@@ -360,23 +390,22 @@ function abrirSobre() {
         // Step 2: Pop out and expand letter for reading
         setTimeout(() => {
             envelope.classList.add('read-mode');
-            if (btnCerrar) btnCerrar.style.display = 'inline-flex';
         }, 1500);
     }
 }
 
-function cerrarSobre() {
+function cerrarSobre(e) {
+    if (e) { e.preventDefault(); e.stopPropagation(); }
     const envelope = document.getElementById('envelope');
-    const btnCerrar = document.getElementById('btn-cerrar-sobre');
 
     // Reverse Steps
     envelope.classList.remove('read-mode');
-    if (btnCerrar) btnCerrar.style.display = 'none';
 
+    // The letter takes 1.4s to retreat into the opening slot because of the 0.6s delay + 0.8s slide
     setTimeout(() => {
         envelope.classList.remove('open');
         isEnvelopeOpen = false;
-    }, 800);
+    }, 1400);
 }
 
 // --- 8. CONTADOR DE TIEMPO ---
@@ -612,7 +641,7 @@ function triggerGingerEasterEgg() {
     overlay.style.left = '0';
     overlay.style.width = '100vw';
     overlay.style.height = '100vh';
-    overlay.style.backgroundColor = 'rgba(0,0,0,0.6)';
+    overlay.style.backgroundColor = 'rgba(255,255,255,0.7)';
     overlay.style.zIndex = '9998';
     overlay.style.transition = 'opacity 0.5s';
     
@@ -748,7 +777,7 @@ function triggerEasterEgg() {
 
     // 2. Magical Floating Text Overlay
     const overlay = document.createElement("div");
-    overlay.innerHTML = "✨ ¡Hola Mi Cielo! ✨<br><span style='font-size:2rem; font-family: var(--font-heading)'>El universo conspiró para que nos encontraramos.</span>";
+    overlay.innerHTML = "🌸 ¡Hola Mi Cielo! 🌸<br><span style='font-size:2rem; font-family: var(--font-heading)'>Esta primavera floreció para nosotros.</span>";
     overlay.style.position = "fixed";
     overlay.style.top = "50%";
     overlay.style.left = "50%";
@@ -792,3 +821,315 @@ function triggerEasterEgg() {
         setTimeout(() => overlay.remove(), 1500);
     }, 5500);
 }
+
+// --- 14. MEMORY STORAGE (INDEXEDDB) ---
+let memoryDB;
+
+function initDB() {
+    const request = indexedDB.open('LoveGalleryDB', 1);
+
+    request.onupgradeneeded = function(e) {
+        memoryDB = e.target.result;
+        if (!memoryDB.objectStoreNames.contains('memories')) {
+            memoryDB.createObjectStore('memories', { keyPath: 'id', autoIncrement: true });
+        }
+    };
+
+    request.onsuccess = function(e) {
+        memoryDB = e.target.result;
+        loadMemories();
+    };
+
+    request.onerror = function(e) {
+        console.error("IndexedDB error:", e);
+    };
+}
+
+// Call initDB on load
+window.addEventListener('load', initDB);
+
+window.abrirModalMemoria = function() {
+    document.getElementById('modal-memory').classList.remove('hidden');
+};
+
+window.cerrarModalMemoria = function() {
+    document.getElementById('modal-memory').classList.add('hidden');
+    // Reset fields
+    document.getElementById('memory-upload').value = '';
+    document.getElementById('memory-preview-container').style.display = 'none';
+    document.getElementById('memory-preview').src = '';
+    document.getElementById('memory-caption').value = '';
+    const btnSave = document.getElementById('btn-save-memory');
+    btnSave.disabled = true;
+    btnSave.style.opacity = '0.5';
+    btnSave.style.cursor = 'not-allowed';
+};
+
+let currentMemoryBase64 = null;
+
+window.previewMemory = function(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        currentMemoryBase64 = e.target.result;
+        document.getElementById('memory-preview').src = currentMemoryBase64;
+        document.getElementById('memory-preview-container').style.display = 'block';
+        
+        const btnSave = document.getElementById('btn-save-memory');
+        btnSave.disabled = false;
+        btnSave.style.opacity = '1';
+        btnSave.style.cursor = 'pointer';
+    };
+    reader.onerror = function() {
+        alert("Error al leer la imagen. Intenta con otra foto.");
+    };
+    reader.readAsDataURL(file);
+};
+
+window.guardarMemoria = function() {
+    if (!currentMemoryBase64) return;
+    const caption = document.getElementById('memory-caption').value || "Un hermoso recuerdo nuevo 🌸";
+
+    const memoryParams = {
+        image: currentMemoryBase64,
+        caption: caption,
+        date: new Date().getTime()
+    };
+
+    if (!memoryDB) {
+        // Fallback if IndexedDB is blocked or failed
+        cerrarModalMemoria();
+        agregarPolaroidDOM(memoryParams.image, memoryParams.caption, Date.now());
+        confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 }, colors: ['#ff4d85', '#77DD77'] });
+        return;
+    }
+
+    try {
+        const transaction = memoryDB.transaction(['memories'], 'readwrite');
+        const store = transaction.objectStore('memories');
+        const request = store.add(memoryParams);
+
+        request.onsuccess = function(event) {
+            cerrarModalMemoria();
+            const newId = event.target.result;
+            // Add to DOM instantly
+            agregarPolaroidDOM(memoryParams.image, memoryParams.caption, newId);
+            // Celebration
+            confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 }, colors: ['#ff4d85', '#77DD77'] });
+        };
+        request.onerror = function() {
+            alert("No se pudo guardar permanentemente, pero se mostrará ahora.");
+            cerrarModalMemoria();
+            agregarPolaroidDOM(memoryParams.image, memoryParams.caption, Date.now());
+        };
+    } catch(err) {
+        cerrarModalMemoria();
+        agregarPolaroidDOM(memoryParams.image, memoryParams.caption, Date.now());
+    }
+};
+
+function loadMemories() {
+    const transaction = memoryDB.transaction(['memories'], 'readonly');
+    const store = transaction.objectStore('memories');
+    const request = store.getAll();
+
+    request.onsuccess = function(e) {
+        const memories = e.target.result;
+        memories.forEach(mem => {
+            agregarPolaroidDOM(mem.image, mem.caption, mem.id);
+        });
+    };
+}
+
+function agregarPolaroidDOM(imageSrc, captionText, dbId) {
+    const timelineContainer = document.querySelector('.timeline-container');
+    if (!timelineContainer) return;
+
+    const newItem = document.createElement('div');
+    newItem.className = 'timeline-item reveal-element show-reveal';
+    
+    // Create inner HTML safely to prevent Base64 string crashes in DOM parser
+    newItem.innerHTML = `
+        <div class="timeline-dot"></div>
+        <div class="polaroid tilt-effect" style="position: relative;">
+            <button class="delete-btn" onclick="borrarMemoria(${dbId}, this, event)" title="Borrar Recuerdo" style="position: absolute; top: -15px; right: -15px; background: #ff4d85; color: white; border: 2px solid white; border-radius: 50%; width: 35px; height: 35px; cursor: pointer; z-index: 50; font-size: 16px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); display: flex; justify-content: center; align-items: center; transition: transform 0.2s;">🗑️</button>
+            <div class="polaroid-inner">
+                <img loading="lazy">
+                <p class="caption"></p>
+            </div>
+        </div>
+    `;
+
+    // Force visibility just in case intersection observer missed it
+    newItem.style.opacity = '1';
+    newItem.style.visibility = 'visible';
+    newItem.style.transform = 'translateY(0)';
+
+    // Safely assign data bypassing HTML DOM string parser issues with large Base64
+    const photoImg = newItem.querySelector('img');
+    photoImg.src = imageSrc;
+    photoImg.alt = captionText;
+    
+    newItem.querySelector('p.caption').textContent = '"' + captionText + '"';
+
+    // Add interactivity to the delete button
+    const deleteBtn = newItem.querySelector('.delete-btn');
+    if (deleteBtn) {
+        deleteBtn.onmouseover = () => deleteBtn.style.transform = 'scale(1.2)';
+        deleteBtn.onmouseout = () => deleteBtn.style.transform = 'scale(1)';
+    }
+
+    // Add click event for lightbox
+    const img = newItem.querySelector('img');
+    img.addEventListener('click', (e) => {
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightbox-img');
+        const lightboxCaption = document.getElementById('lightbox-caption');
+        if(lightbox && lightboxImg) {
+            lightboxImg.src = e.target.src;
+            if(lightboxCaption) lightboxCaption.textContent = captionText;
+            lightbox.classList.add('active');
+        }
+    });
+
+    timelineContainer.appendChild(newItem);
+
+    // Apply VanillaTilt to new element if available
+    const tiltEl = newItem.querySelector('.tilt-effect');
+    if (tiltEl && window.VanillaTilt) {
+        VanillaTilt.init(tiltEl, {
+            max: 15,
+            speed: 400,
+            glare: true,
+            "max-glare": 0.2
+        });
+    }
+}
+
+window.borrarMemoria = function(id, btnElement, event) {
+    event.stopPropagation();
+    if (!confirm("¿Estás seguro de que deseas eliminar este recuerdo para siempre? 💔")) return;
+
+    // Remove from UI first for responsiveness
+    const timelineItem = btnElement.closest('.timeline-item');
+    if (timelineItem) {
+        timelineItem.style.transition = 'opacity 0.5s, transform 0.5s';
+        timelineItem.style.opacity = '0';
+        timelineItem.style.transform = 'scale(0.8)';
+        setTimeout(() => timelineItem.remove(), 500);
+    }
+
+    if (memoryDB) {
+        try {
+            const transaction = memoryDB.transaction(['memories'], 'readwrite');
+            const store = transaction.objectStore('memories');
+            store.delete(id);
+        } catch (e) {
+            console.error("Error al borrar en BD", e);
+        }
+    }
+};
+
+// --- 13. EASTER EGG HUNT ---
+let huevosEncontrados = 0;
+window.encontrarHuevo = function(elemento) {
+    if (elemento.classList.contains('encontrado')) return;
+    
+    elemento.classList.add('encontrado');
+    elemento.style.opacity = '1';
+    elemento.style.transform = 'scale(1.5)';
+    elemento.style.transition = 'all 0.3s';
+    
+    huevosEncontrados++;
+    
+    // Confetti for single egg
+    confetti({
+        particleCount: 40,
+        spread: 60,
+        origin: { 
+            x: elemento.getBoundingClientRect().left / window.innerWidth,
+            y: elemento.getBoundingClientRect().top / window.innerHeight
+        },
+        shapes: ['circle']
+    });
+    
+    if (huevosEncontrados === 3) {
+        // Grand finale
+        setTimeout(() => triggerEggFinale(), 800);
+    }
+};
+
+function triggerEggFinale() {
+    confetti({
+        particleCount: 150,
+        spread: 120,
+        origin: { y: 0.6 },
+        colors: ['#ff4d85', '#ffd700', '#ffffff', '#8b3dff']
+    });
+    
+    const overlay = document.createElement("div");
+    overlay.innerHTML = "🎉 ¡Felicidades! 🎉<br><span style='font-size:2rem; font-family: var(--font-heading)'>Efectivamente, encontraste todo. ¡Eres increíble!</span>";
+    overlay.style.position = "fixed";
+    overlay.style.top = "50%";
+    overlay.style.left = "50%";
+    overlay.style.width = "100%";
+    overlay.style.textAlign = "center";
+    overlay.style.transform = "translate(-50%, -50%) scale(0)";
+    overlay.style.color = "var(--text-color)";
+    overlay.style.fontFamily = "var(--font-script)";
+    overlay.style.fontSize = "4rem";
+    overlay.style.lineHeight = "1.2";
+    overlay.style.textShadow = "0 0 20px rgba(255,255,255,0.8)";
+    overlay.style.zIndex = "9999";
+    overlay.style.pointerEvents = "none";
+    overlay.style.transition = "transform 0.8s, opacity 1.5s";
+
+    document.body.appendChild(overlay);
+
+    setTimeout(() => {
+        overlay.style.transform = "translate(-50%, -50%) scale(1)";
+    }, 100);
+
+    setTimeout(() => {
+        overlay.style.opacity = "0";
+        setTimeout(() => overlay.remove(), 1500);
+    }, 5500);
+}
+
+// --- 15. DYNAMIC CLOUDS ---
+function generarNubesPrimavera() {
+    const container = document.getElementById('clouds-container');
+    if (!container) return;
+
+    // Create 15 organic clouds
+    for (let i = 0; i < 15; i++) {
+        const cloud = document.createElement('div');
+        cloud.classList.add('cloud-puff');
+        
+        // Randomizations for a natural sky
+        const scale = 0.4 + Math.random() * 1.5;
+        const topPos = Math.random() * 75; // 0 to 75vh
+        const opacity = 0.3 + Math.random() * 0.6;
+        const speed = 50 + Math.random() * 120; // slow drift 50s to 170s
+        
+        // Proportions 
+        const baseWidth = 120 + Math.random() * 180; 
+        const baseHeight = baseWidth / 2.5; 
+        
+        cloud.style.width = baseWidth + 'px';
+        cloud.style.height = baseHeight + 'px';
+        cloud.style.top = topPos + 'vh';
+        
+        // Random start time creates organic uneven spacing
+        const delay = -Math.random() * speed; 
+        
+        cloud.style.animation = `floatCloud ${speed}s linear ${delay}s infinite`;
+        cloud.style.transform = `scale(${scale})`; // preserve static scaling
+        cloud.style.opacity = opacity;
+        
+        container.appendChild(cloud);
+    }
+}
+window.addEventListener('load', generarNubesPrimavera);
