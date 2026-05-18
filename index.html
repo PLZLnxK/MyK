@@ -3,294 +3,215 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Para mi Persona Favorita</title>
+    <title>Exposición de nuestro Amor</title>
 
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
     <link rel="stylesheet" href="css/style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="icon" href="img/corazon.png" type="image/x-icon">
 </head>
 <body>
-    <!-- Custom Cursor -->
-    <div id="cursor"><span class="butterfly">🦋</span></div>
-    <div id="cursor-blur"></div>
+    <!-- Premium Custom Cursor -->
+    <div id="premium-cursor"></div>
+    <div id="premium-cursor-follower"></div>
 
-    <!-- Cosmic Background -->
-    <div id="cosmic-bg">
-        <canvas id="constellation-canvas"></canvas>
-        <div id="clouds-container"></div>
-        <div id="shooting-stars-container"></div>
+    <!-- Minimalist Counter -->
+    <div id="minimal-counter">
+        <span class="counter-label">NUESTRO TIEMPO</span>
+        <span id="counter-value">Calculando...</span>
     </div>
 
-    <!-- Preloader -->
-    <div id="preloader">
-        <div class="flower-draw-container">
-            <svg class="flower-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                <path class="stem" d="M50,90 L50,50" stroke="#77DD77" stroke-width="3" fill="none" stroke-linecap="round" />
-                <path class="leaf" d="M50,70 Q70,70 60,60" stroke="#77DD77" stroke-width="2" fill="none" stroke-linecap="round" />
-                <g class="petals">
-                    <path d="M50,50 C30,30 30,10 50,10 C70,10 70,30 50,50 Z" fill="#FF85A1" />
-                    <path d="M50,50 C70,30 90,30 90,50 C90,70 70,70 50,50 Z" fill="#FF85A1" />
-                    <path d="M50,50 C70,70 70,90 50,90 C30,90 30,70 50,50 Z" fill="#FF85A1" />
-                    <path d="M50,50 C30,70 10,70 10,50 C10,30 30,30 50,50 Z" fill="#FF85A1" />
-                </g>
-                <circle class="center" cx="50" cy="50" r="8" fill="#FBB02D" />
-            </svg>
-        </div>
-        <p class="texto-loader">Esperando a que floresca la primavera...</p>
-    </div>
-    
-    <!-- Floating Counter -->
-    <div id="contador-flotante" class="contador-mini glass-panel">
-        <span id="tiempo-transcurrido"></span>
+    <!-- Music Player Minimalista -->
+    <div id="music-player" onclick="toggleMusica()">
+        <span id="music-icon">🎵 Play</span>
+        <audio id="miMusica" loop>
+            <source src="img/la gloria eres tu.mp3" type="audio/mpeg">
+        </audio>
     </div>
 
-    <!-- Music Control & Visualizer -->
-    <div id="audio-wrapper">
-        <span class="hidden-egg" style="position: absolute; top: -10px; right: 70px; opacity: 0.2; cursor: pointer; font-size: 1.2rem;" onclick="encontrarHuevo(this)">🥚</span>
-        <canvas id="audio-visualizer"></canvas>
-        <div id="music-container" class="music-control glass-panel" onclick="toggleMusica()">
-            <span id="music-icon">🔇</span>
-            <audio id="miMusica" loop crossorigin="anonymous">
-                <source src="img/la gloria eres tu.mp3" type="audio/mpeg">
-            </audio>
-        </div>
-    </div>
-
-    <!-- Hero Section -->
-    <section id="inicio" class="full-screen">
-        <div id="background-phrases" class="background-container"></div>
+    <!-- Contenedor Principal Scroll Horizontal -->
+    <main class="horizontal-scroll-container">
         
-        <div class="main-container glass-panel reveal-element">
-            <h1 class="main-phrase">"En todo el mundo no hay un corazón para mí como el tuyo. En todo el mundo, no hay amor para ti como el mío."</h1>
-            <div class="author">— Maya Angelou</div>
-            <p class="instruccion text-glow">Desliza suavemente hacia nuestro universo...</p>
-        </div>
-        
-        <div class="scroll-indicator">
-            <span class="hidden-egg" style="position: absolute; left: -60px; top: 10px; opacity: 0.2; cursor: pointer; font-size: 1.5rem;" onclick="encontrarHuevo(this)">🥚</span>
-            <div class="mouse">
-                <div class="wheel"></div>
+        <!-- Slide 1: Intro -->
+        <section class="slide intro-slide">
+            <div class="intro-content fade-in">
+                <p class="subtitle">EXPOSICIÓN PRIVADA</p>
+                <h1 class="title">Nuestro Mayo</h1>
+                <p class="quote">"Tú eres mi jardín floreciendo en primavera, el sol de mi mayo y la luz de mis días."</p>
+                <div class="scroll-prompt">
+                    <span>Desliza para comenzar</span>
+                    <div class="arrow-right">→</div>
+                </div>
             </div>
-            <div>
-                <span class="m_scroll_arrows unu"></span>
-                <span class="m_scroll_arrows doi"></span>
-                <span class="m_scroll_arrows trei"></span>
-            </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Gallery Section (Timeline) -->
-    <section id="galeria" class="full-screen seccion-galeria">
-        <h2 class="titulo-galeria reveal-element text-glow">Nuestra Primavera</h2>
-        <div class="timeline-container">
-            <div class="timeline-line"></div>
-            <!-- Photos -->
-            <div class="timeline-item reveal-element">
-                <div class="timeline-dot"></div>
-                <div class="polaroid tilt-effect">
-                    <div class="polaroid-inner">
-                        <img src="img/foto 1.jpg" alt="1er Jaripeo Plazuela juntos" loading="lazy">
-                        <p class="caption">"1er Jaripeo Plazuela juntos"</p>
-                    </div>
+        <!-- Gallery Slides -->
+        <section class="slide art-slide">
+            <div class="art-content fade-in">
+                <div class="frame">
+                    <img src="img/foto 1.jpg" alt="1er Jaripeo Plazuela juntos" loading="lazy">
+                </div>
+                <div class="caption">
+                    <p class="caption-text">"1er Jaripeo Plazuela juntos"</p>
+                    <span class="caption-number">01</span>
                 </div>
             </div>
-            
-            <div class="timeline-item reveal-element">
-                <div class="timeline-dot"></div>
-                <div class="polaroid tilt-effect">
-                    <div class="polaroid-inner">
-                        <img src="img/foto 2.jpg" id="special-photo" alt="Lo mejor no es Galvan Grill, lo mejor eres tú!" loading="lazy">
-                        <p class="caption">"Lo mejor no es Galvan Grill, lo mejor eres tú!"</p>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="timeline-item reveal-element">
-                <div class="timeline-dot"></div>
-                <div class="polaroid tilt-effect">
-                    <div class="polaroid-inner">
-                        <img src="img/foto 3.jpg" alt="El sol solo ilumina mas tu belleza" loading="lazy">
-                        <p class="caption">"El sol solo ilumina mas tu belleza"</p>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="timeline-item reveal-element">
-                <div class="timeline-dot"></div>
-                <div class="polaroid tilt-effect">
-                    <div class="polaroid-inner">
-                        <img src="img/foto 4.jpg" alt="Si tengo los ojos chiquitos es porque me haces feliz" loading="lazy">
-                        <p class="caption">"Si tengo los ojos chiquitos es porque me haces feliz"</p>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="timeline-item reveal-element">
-                <div class="timeline-dot"></div>
-                <div class="polaroid tilt-effect">
-                    <div class="polaroid-inner">
-                        <img src="img/foto 5.jpg" alt="Coleccionando momentos (y comida)" loading="lazy">
-                        <p class="caption">"Coleccionando momentos (y comida)"</p>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="timeline-item reveal-element">
-                <div class="timeline-dot"></div>
-                <div class="polaroid tilt-effect">
-                    <div class="polaroid-inner">
-                        <img src="img/foto 6.jpg" alt="Hay amor en los tacos de Beto" loading="lazy">
-                        <p class="caption">"Hay amor en los tacos de Beto"</p>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="timeline-item reveal-element">
-                <div class="timeline-dot"></div>
-                <div class="polaroid tilt-effect">
-                    <div class="polaroid-inner">
-                        <img src="img/foto 7.jpg" alt="Fererio y collares del amor" loading="lazy">
-                        <p class="caption">"Fererio y collares del amor"</p>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="timeline-item reveal-element">
-                <div class="timeline-dot"></div>
-                <div class="polaroid tilt-effect">
-                    <div class="polaroid-inner">
-                        <img src="img/foto 8.jpg" alt="El arte de coincidir contigo" loading="lazy">
-                        <p class="caption">"El arte de coincidir contigo"</p>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="timeline-item reveal-element">
-                <div class="timeline-dot"></div>
-                <div class="polaroid tilt-effect">
-                    <div class="polaroid-inner">
-                        <img src="img/foto 9.jpg" alt="Aventuras de dos locos sueltos" loading="lazy">
-                        <p class="caption">"Aventuras de dos locos sueltos"</p>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="timeline-item reveal-element">
-                <div class="timeline-dot"></div>
-                <div class="polaroid tilt-effect">
-                    <div class="polaroid-inner">
-                        <img src="img/foto 10.jpg" alt="Simplemente nosotros" loading="lazy">
-                        <p class="caption">"Simplemente nosotros"</p>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="timeline-item reveal-element">
-                <div class="timeline-dot"></div>
-                <div class="polaroid tilt-effect">
-                    <div class="polaroid-inner">
-                        <img src="img/foto 11.jpg" alt="Capítulo: Tú y Yo" loading="lazy">
-                        <p class="caption">"Capítulo: Tú y Yo"</p>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="timeline-item reveal-element">
-                <div class="timeline-dot"></div>
-                <div class="polaroid tilt-effect">
-                    <div class="polaroid-inner">
-                        <img src="img/foto 12.jpg" alt="Nuestra primer Posada juntos" loading="lazy">
-                        <p class="caption">"Nuestra primer Posada juntos"</p>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="timeline-item reveal-element">
-                <div class="timeline-dot"></div>
-                <div class="polaroid tilt-effect">
-                    <div class="polaroid-inner">
-                        <img src="img/foto 13.jpg" alt="Un año en 13 suspiros" loading="lazy">
-                        <p class="caption">"Un año en 13 suspiros"</p>
-                    </div>
-                </div>
-            </div>
-        </div>
+        </section>
 
-        <div class="add-memory-wrapper reveal-element" style="text-align: center; margin: 40px 0;">
-            <button id="btn-add-memory" class="action-btn" onclick="abrirModalMemoria()">
-                <span>Añadir Nuevo Recuerdo 🌸</span>
-                <div class="btn-glow"></div>
-            </button>
-        </div>
-
-        <div class="mensaje-final reveal-element">
-            <h3 class="gracias text-glow" >Gracias por estos momentos tan brillantes 🌸</h3>
-            <p class="nota-final">Cada una de estas fotos es mi paisaje favorito porque tú estás en ella.</p>
-        </div>
-    </section>
-
-    <!-- Letter Section -->
-    <div class="seccion-carta reveal-element">
-        <p class="hint-carta">Tengo un último mensaje escondido entre las flores para ti...</p>
-        
-        <!-- Interactive Envelope -->
-        <div class="envelope-wrapper" onclick="abrirSobre(event)">
-            <div id="envelope" class="close">
-                <div class="front flap"></div>
-                <div class="front pocket"></div>
-                <div class="letter">
-                    <button class="close-letter-btn" onclick="cerrarSobre(event)" style="position:absolute; top: 10px; right: 10px; background: transparent; border: none; font-size: 1.5rem; cursor: pointer; color: #4a2b38; z-index: 50;">✖</button>
-                    <span class="hidden-egg" style="position: absolute; top: 10px; right: 40px; opacity: 0.3; cursor: pointer; font-size: 2rem;" onclick="encontrarHuevo(this)">🥚</span>
-                    <h2 class="titulo-carta">Para mi persona favorita</h2>
-                    <p class="texto-carta">
-                        El amor, el amor... nuestro amor... mi niña me haces inmensamente feliz, estar a tu lado es tenerlo todo y a la vez recibir mas y mas. Eres grandiosa, espectacular, todo lo que alguna vez pude soñar.<br><br>
-                        Amor mío, mi amor por ti es eterno y absoluto. Nuestras almas ya están entrelazadas por la eternidad; somos un mismo suspiro en la inmensidad del cosmos.<br><br>
-                        "Mi cielo, incluso si el mundo entero se pone en nuestra contra, no me importa, siempre y cuando estés a mi lado. Somos como dos flores destinadas a florecer juntas bajo el mismo sol de primavera."
-                    </p>
-                    <p class="firma">Con todo mi amor, Tu hermoso hombre de chocolate blanco 🌸</p>
+        <section class="slide art-slide">
+            <div class="art-content fade-in">
+                <div class="frame">
+                    <img src="img/foto 2.jpg" alt="Lo mejor no es Galvan Grill, lo mejor eres tú!" loading="lazy">
                 </div>
-                <!-- Cera del sello -->
-                <div class="wax-seal">🌸</div>
+                <div class="caption">
+                    <p class="caption-text">"Lo mejor no es Galvan Grill, lo mejor eres tú!"</p>
+                    <span class="caption-number">02</span>
+                </div>
             </div>
-        </div>
-    </div>
+        </section>
 
-    <!-- Lightbox -->
-    <div id="lightbox" class="lightbox" onclick="this.classList.remove('active')">
-        <img id="lightbox-img" src="" alt="Zoom">
-        <p id="lightbox-caption" class="lightbox-caption"></p>
-    </div>
-
-    <!-- Heart Particles Container -->
-    <div id="particles-container"></div>
-
-    <!-- Modal para añadir foto -->
-    <div id="modal-memory" class="modal-overlay hidden">
-        <div class="modal-content glass-panel" style="width: 90%; max-width: 400px; padding: 30px; text-align: center; border-radius: 12px; position:relative;">
-            <button onclick="cerrarModalMemoria()" style="position:absolute; top: 10px; right: 15px; background: transparent; border: none; font-size: 1.5rem; cursor: pointer; color: #4a2b38; z-index:10;">✖</button>
-            <h3 style="color: #c9184a; font-family: var(--font-heading); margin-bottom: 20px;">Planta un Nuevo Recuerdo</h3>
-            
-            <label for="memory-upload" class="action-btn" style="padding: 10px 20px; font-size: 1rem; width: 100%; display:inline-block; cursor:pointer; margin-bottom: 20px; box-sizing:border-box;">
-                <span>Seleccionar Imagen 📸</span>
-                <div class="btn-glow"></div>
-                <input type="file" id="memory-upload" accept="image/*" style="opacity: 0; position: absolute; width: 1px; height: 1px; z-index: -1;" onchange="previewMemory(event)">
-            </label>
-            
-            <div id="memory-preview-container" style="display:none; margin-bottom: 20px;">
-                <img id="memory-preview" style="max-width: 100%; max-height: 200px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); object-fit: contain;" />
+        <section class="slide art-slide">
+            <div class="art-content fade-in">
+                <div class="frame">
+                    <img src="img/foto 3.jpg" alt="El sol solo ilumina mas tu belleza" loading="lazy">
+                </div>
+                <div class="caption">
+                    <p class="caption-text">"El sol solo ilumina mas tu belleza"</p>
+                    <span class="caption-number">03</span>
+                </div>
             </div>
+        </section>
 
-            <textarea id="memory-caption" placeholder="Escribe un mensajito bonito para esta foto..." style="width: 100%; height: 80px; padding: 10px; border-radius: 8px; border: 1px solid #ffd1dc; margin-bottom: 20px; font-family: var(--font-body); resize: none; background: rgba(255,255,255,0.7); color: #4a2b38; outline: none;"></textarea>
+        <section class="slide art-slide">
+            <div class="art-content fade-in">
+                <div class="frame">
+                    <img src="img/foto 4.jpg" alt="Si tengo los ojos chiquitos es porque me haces feliz" loading="lazy">
+                </div>
+                <div class="caption">
+                    <p class="caption-text">"Si tengo los ojos chiquitos es porque me haces feliz"</p>
+                    <span class="caption-number">04</span>
+                </div>
+            </div>
+        </section>
 
-            <button id="btn-save-memory" class="action-btn" onclick="guardarMemoria()" style="width: 100%; opacity: 0.5; cursor: not-allowed;" disabled>
-                <span>Guardar Recuerdo ✨</span>
-                <div class="btn-glow"></div>
-            </button>
-        </div>
-    </div>
+        <section class="slide art-slide">
+            <div class="art-content fade-in">
+                <div class="frame">
+                    <img src="img/foto 5.jpg" alt="Coleccionando momentos (y comida)" loading="lazy">
+                </div>
+                <div class="caption">
+                    <p class="caption-text">"Coleccionando momentos (y comida)"</p>
+                    <span class="caption-number">05</span>
+                </div>
+            </div>
+        </section>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.0/vanilla-tilt.min.js"></script>
+        <section class="slide art-slide">
+            <div class="art-content fade-in">
+                <div class="frame">
+                    <img src="img/foto 6.jpg" alt="Hay amor en los tacos de Beto" loading="lazy">
+                </div>
+                <div class="caption">
+                    <p class="caption-text">"Hay amor en los tacos de Beto"</p>
+                    <span class="caption-number">06</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="slide art-slide">
+            <div class="art-content fade-in">
+                <div class="frame">
+                    <img src="img/foto 7.jpg" alt="Fererio y collares del amor" loading="lazy">
+                </div>
+                <div class="caption">
+                    <p class="caption-text">"Fererio y collares del amor"</p>
+                    <span class="caption-number">07</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="slide art-slide">
+            <div class="art-content fade-in">
+                <div class="frame">
+                    <img src="img/foto 8.jpg" alt="El arte de coincidir contigo" loading="lazy">
+                </div>
+                <div class="caption">
+                    <p class="caption-text">"El arte de coincidir contigo"</p>
+                    <span class="caption-number">08</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="slide art-slide">
+            <div class="art-content fade-in">
+                <div class="frame">
+                    <img src="img/foto 9.jpg" alt="Aventuras de dos locos sueltos" loading="lazy">
+                </div>
+                <div class="caption">
+                    <p class="caption-text">"Aventuras de dos locos sueltos"</p>
+                    <span class="caption-number">09</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="slide art-slide">
+            <div class="art-content fade-in">
+                <div class="frame">
+                    <img src="img/foto 10.jpg" alt="Simplemente nosotros" loading="lazy">
+                </div>
+                <div class="caption">
+                    <p class="caption-text">"Simplemente nosotros"</p>
+                    <span class="caption-number">10</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="slide art-slide">
+            <div class="art-content fade-in">
+                <div class="frame">
+                    <img src="img/foto 11.jpg" alt="Capítulo: Tú y Yo" loading="lazy">
+                </div>
+                <div class="caption">
+                    <p class="caption-text">"Capítulo: Tú y Yo"</p>
+                    <span class="caption-number">11</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="slide art-slide">
+            <div class="art-content fade-in">
+                <div class="frame">
+                    <img src="img/foto 12.jpg" alt="Nuestra primer Posada juntos" loading="lazy">
+                </div>
+                <div class="caption">
+                    <p class="caption-text">"Nuestra primer Posada juntos"</p>
+                    <span class="caption-number">12</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="slide art-slide">
+            <div class="art-content fade-in">
+                <div class="frame">
+                    <img src="img/foto 13.jpg" alt="Un año en 13 suspiros" loading="lazy">
+                </div>
+                <div class="caption">
+                    <p class="caption-text">"Un año en 13 suspiros"</p>
+                    <span class="caption-number">13</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Final Slide -->
+        <section class="slide end-slide">
+            <div class="intro-content fade-in">
+                <h1 class="title">Eternidad</h1>
+                <p class="quote">"El amor, el amor... nuestro amor... mi niña me haces inmensamente feliz. Estar a tu lado es tenerlo todo."</p>
+                <p class="subtitle" style="margin-top: 40px; font-style: italic;">Con todo mi amor, Tu hermoso hombre de chocolate blanco 🌸</p>
+            </div>
+        </section>
+
+    </main>
+
     <script src="js/script.js"></script>
 </body>
 </html>
