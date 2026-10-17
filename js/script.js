@@ -47,7 +47,7 @@ function updateCounter() {
     
     const counterEl = document.getElementById('counter-value');
     if(counterEl) {
-        counterEl.innerText = `${days} días de luz`;
+        counterEl.innerText = `${days} días embrujados`;
     }
 }
 updateCounter();
@@ -90,13 +90,47 @@ function toggleMusica() {
     if (musica.paused) {
         musica.play().then(() => {
             icono.innerText = '🎵 Playing';
-            player.style.background = 'rgba(140, 154, 142, 0.2)'; // Sage green tint
-            player.style.borderColor = 'rgba(140, 154, 142, 0.8)';
+            player.style.background = 'rgba(255, 122, 26, 0.2)'; // Pumpkin orange tint
+            player.style.borderColor = 'rgba(255, 122, 26, 0.8)';
         }).catch(e => console.log("Waiting for user interaction..."));
     } else {
         musica.pause();
         icono.innerText = '🎵 Paused';
-        player.style.background = 'rgba(248, 245, 242, 0.8)';
-        player.style.borderColor = 'rgba(45, 48, 46, 0.2)';
+        player.style.background = 'rgba(26, 14, 38, 0.8)';
+        player.style.borderColor = 'rgba(243, 233, 220, 0.2)';
     }
 }
+
+// --- 5. HALLOWEEN: MURCIÉLAGOS Y CALABAZAS ---
+(function spookyDecor() {
+    const layer = document.getElementById('spooky-layer');
+    if (!layer || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    const isSmall = window.innerWidth < 900;
+
+    // Murciélagos cruzando la pantalla
+    const batCount = isSmall ? 3 : 5;
+    for (let i = 0; i < batCount; i++) {
+        const bat = document.createElement('span');
+        bat.className = 'bat';
+        bat.textContent = '🦇';
+        bat.style.top = `${5 + Math.random() * 45}vh`;
+        bat.style.fontSize = `${0.9 + Math.random() * 1.1}rem`;
+        bat.style.animationDuration = `${14 + Math.random() * 12}s, ${0.8 + Math.random() * 0.6}s`;
+        bat.style.animationDelay = `${-Math.random() * 20}s, 0s`;
+        layer.appendChild(bat);
+    }
+
+    // Calabazas flotando suavemente abajo
+    const pumpkinCount = isSmall ? 2 : 4;
+    for (let i = 0; i < pumpkinCount; i++) {
+        const pumpkin = document.createElement('span');
+        pumpkin.className = 'pumpkin';
+        pumpkin.textContent = '🎃';
+        const start = isSmall ? 55 : 22;
+        pumpkin.style.left = `${start + (i * (90 - start) / pumpkinCount) + Math.random() * 5}vw`;
+        pumpkin.style.fontSize = `${1.2 + Math.random() * 0.8}rem`;
+        pumpkin.style.animationDelay = `${-Math.random() * 6}s`;
+        layer.appendChild(pumpkin);
+    }
+})();
