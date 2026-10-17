@@ -117,7 +117,7 @@ if (enterBtn) {
 
 // --- 7. HECHIZO DEL NOMBRE ---
 // Si escribe su nombre (o lo susurra tocando la casa), la casa se ilumina.
-const HECHIZO_NOMBRE = "NOMBRE";
+const HECHIZO_NOMBRE = "Mariana";
 const HECHIZO_MENSAJE = "MENSAJE OCULTO";
 
 const secretOverlay = document.getElementById('secret-overlay');
