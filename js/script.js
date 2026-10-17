@@ -118,7 +118,7 @@ if (enterBtn) {
 // --- 7. HECHIZO DEL NOMBRE ---
 // Si escribe su nombre (o lo susurra tocando la casa), la casa se ilumina.
 const HECHIZO_NOMBRE = "Mariana";
-const HECHIZO_MENSAJE = "MENSAJE OCULTO";
+const HECHIZO_MENSAJE = "¡Es un intercambio equivalente! Te daré la mitad de mi vida, así que... ¡dame la mitad de la tuya!";
 
 const secretOverlay = document.getElementById('secret-overlay');
 const secretContent = document.getElementById('secret-content');
