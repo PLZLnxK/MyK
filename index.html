@@ -2,215 +2,144 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Exposición de nuestro Amor</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nuestro Halloween</title>
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Creepster&family=Caveat:wght@500;700&family=Cormorant+Garamond:ital,wght@1,400;1,600&family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎃</text></svg>">
 </head>
 <body>
-    <!-- Premium Custom Cursor -->
-    <div id="premium-cursor"></div>
-    <div id="premium-cursor-follower"></div>
+    <!-- Cursor de vela (solo con mouse) -->
+    <div id="candle-cursor" aria-hidden="true"></div>
 
-    <!-- Minimalist Counter -->
-    <div id="minimal-counter">
-        <span class="counter-label">NUESTRO TIEMPO</span>
-        <span id="counter-value">Calculando...</span>
-    </div>
+    <!-- Reproductor: calabaza flotante -->
+    <button id="music-player" type="button" onclick="toggleMusica()" aria-label="Reproducir música">
+        <span class="pumpkin-btn">🎃</span>
+        <span class="eq" aria-hidden="true"><i></i><i></i><i></i></span>
+        <span id="music-icon">Música</span>
+    </button>
+    <audio id="miMusica" loop preload="none">
+        <source src="audio/halloween.mp3" type="audio/mpeg">
+    </audio>
 
-    <!-- Music Player Minimalista -->
-    <div id="music-player" onclick="toggleMusica()">
-        <span id="music-icon">🎵 Play</span>
-        <audio id="miMusica" loop>
-            <source src="img/la gloria eres tu.mp3" type="audio/mpeg">
-        </audio>
-    </div>
+    <!-- ========== 1. PORTAL ========== -->
+    <header class="portal" id="inicio">
+        <div class="sky" aria-hidden="true">
+            <div class="stars"></div>
+            <div class="moon"><div class="moon-crater c1"></div><div class="moon-crater c2"></div><div class="moon-crater c3"></div></div>
+            <div id="bats"></div>
+        </div>
 
-    <!-- Contenedor Principal Scroll Horizontal -->
-    <main class="horizontal-scroll-container">
-        
-        <!-- Slide 1: Intro -->
-        <section class="slide intro-slide">
-            <div class="intro-content fade-in">
-                <p class="subtitle">EXPOSICIÓN PRIVADA</p>
-                <h1 class="title">Nuestro Mayo</h1>
-                <p class="quote">"Tú eres mi jardín floreciendo en primavera, el sol de mi mayo y la luz de mis días."</p>
-                <div class="scroll-prompt">
-                    <span>Desliza para comenzar</span>
-                    <div class="arrow-right">→</div>
-                </div>
-            </div>
-        </section>
+        <!-- Paisaje: colina, casa embrujada, árboles y cementerio -->
+        <svg class="landscape" viewBox="0 0 1440 520" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+            <defs>
+                <radialGradient id="windowGlow" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stop-color="#FFD27A"/>
+                    <stop offset="100%" stop-color="#FF7518"/>
+                </radialGradient>
+            </defs>
+            <!-- colina lejana -->
+            <path d="M0 360 Q240 280 480 330 T960 300 T1440 340 V520 H0 Z" fill="#1B1029"/>
+            <!-- casa embrujada -->
+            <g class="house" transform="translate(1020 150)">
+                <path d="M40 200 V90 L20 90 L95 10 L170 90 L150 90 V200 Z" fill="#0D0714"/>
+                <path d="M120 60 V20 H140 V78 Z" fill="#0D0714"/>
+                <path d="M150 200 V120 L140 120 L200 60 L260 120 L250 120 V200 Z" fill="#0D0714"/>
+                <rect x="185" y="20" width="10" height="45" fill="#0D0714"/>
+                <rect class="win" x="70" y="105" width="18" height="26" fill="url(#windowGlow)"/>
+                <rect class="win w2" x="102" y="105" width="18" height="26" fill="url(#windowGlow)"/>
+                <rect class="win w3" x="190" y="135" width="20" height="24" fill="url(#windowGlow)"/>
+                <circle class="win w2" cx="95" cy="62" r="9" fill="url(#windowGlow)"/>
+                <path d="M84 200 V160 Q95 148 106 160 V200 Z" fill="#2A1640"/>
+            </g>
+            <!-- colina cercana -->
+            <path d="M0 430 Q200 370 420 400 T860 390 T1440 420 V520 H0 Z" fill="#120A1C"/>
+            <!-- árbol torcido -->
+            <path d="M210 410 C205 340 215 300 190 250 C175 220 150 210 130 200 M190 250 C200 230 230 215 250 190 M200 300 C230 290 260 285 290 260 M185 330 C160 320 140 300 120 300" stroke="#0A0610" stroke-width="10" fill="none" stroke-linecap="round"/>
+            <path d="M200 412 C198 380 202 330 196 300" stroke="#0A0610" stroke-width="18" fill="none" stroke-linecap="round"/>
+            <!-- lápidas -->
+            <g fill="#0A0610">
+                <path d="M520 420 V385 Q540 360 560 385 V420 Z"/>
+                <path d="M600 415 V392 Q615 375 630 392 V415 Z"/>
+                <rect x="690" y="372" width="10" height="45"/><rect x="678" y="385" width="34" height="9"/>
+                <path d="M760 418 V390 Q778 368 796 390 V418 Z"/>
+            </g>
+            <!-- reja -->
+            <g stroke="#0A0610" stroke-width="5">
+                <path d="M0 470 H1440"/>
+                <path d="M30 470 V440 M80 470 V440 M130 470 V440 M180 470 V440 M230 470 V440 M280 470 V440 M330 470 V440 M380 470 V440 M1060 470 V440 M1110 470 V440 M1160 470 V440 M1210 470 V440 M1260 470 V440 M1310 470 V440 M1360 470 V440 M1410 470 V440"/>
+            </g>
+            <path d="M0 520 V470 H1440 V520 Z" fill="#0A0610"/>
+        </svg>
+        <div class="fog fog-1" aria-hidden="true"></div>
+        <div class="fog fog-2" aria-hidden="true"></div>
 
-        <!-- Gallery Slides -->
-        <section class="slide art-slide">
-            <div class="art-content fade-in">
-                <div class="frame">
-                    <img src="img/foto 1.jpg" alt="1er Jaripeo Plazuela juntos" loading="lazy">
-                </div>
-                <div class="caption">
-                    <p class="caption-text">"1er Jaripeo Plazuela juntos"</p>
-                    <span class="caption-number">01</span>
-                </div>
-            </div>
-        </section>
+        <div class="portal-content">
+            <p class="eyebrow">Una exposición embrujada para ti</p>
+            <h1 class="title">Nuestro<br>Halloween</h1>
+            <p class="quote">"Ni el hechizo más poderoso se compara con el que tú me lanzaste. Eres mi dulce favorito, en esta noche y en todas."</p>
+            <a href="#lapida" class="enter-btn" id="enter-btn">🕯️ Entra si te atreves</a>
+        </div>
+    </header>
 
-        <section class="slide art-slide">
-            <div class="art-content fade-in">
-                <div class="frame">
-                    <img src="img/foto 2.jpg" alt="Lo mejor no es Galvan Grill, lo mejor eres tú!" loading="lazy">
-                </div>
-                <div class="caption">
-                    <p class="caption-text">"Lo mejor no es Galvan Grill, lo mejor eres tú!"</p>
-                    <span class="caption-number">02</span>
-                </div>
-            </div>
-        </section>
+    <!-- ========== 2. LÁPIDA CONTADOR ========== -->
+    <section class="graveyard" id="lapida">
+        <div class="tombstone reveal">
+            <span class="rip">R.I.P.</span>
+            <p class="tomb-label">Aquí yacen</p>
+            <p class="tomb-days"><span id="counter-value">···</span></p>
+            <p class="tomb-label">días embrujados juntos</p>
+            <p class="tomb-date">desde el 21 · 07 · 2024</p>
+            <p class="tomb-epitaph">y lo que nos falte de eternidad</p>
+        </div>
+        <span class="grave-pumpkin left" aria-hidden="true">🎃</span>
+        <span class="grave-pumpkin right" aria-hidden="true">🎃</span>
+        <div class="ground" aria-hidden="true"></div>
+    </section>
 
-        <section class="slide art-slide">
-            <div class="art-content fade-in">
-                <div class="frame">
-                    <img src="img/foto 3.jpg" alt="El sol solo ilumina mas tu belleza" loading="lazy">
-                </div>
-                <div class="caption">
-                    <p class="caption-text">"El sol solo ilumina mas tu belleza"</p>
-                    <span class="caption-number">03</span>
-                </div>
-            </div>
-        </section>
+    <!-- ========== 3. MURO DE LOS RECUERDOS ========== -->
+    <section class="wall" id="recuerdos">
+        <div class="spider" aria-hidden="true"><span class="thread"></span><span class="spider-body">🕷️</span></div>
+        <div class="wall-heading reveal">
+            <p class="eyebrow">El muro de los recuerdos</p>
+            <h2 class="section-title">13 momentos hechizados</h2>
+        </div>
 
-        <section class="slide art-slide">
-            <div class="art-content fade-in">
-                <div class="frame">
-                    <img src="img/foto 4.jpg" alt="Si tengo los ojos chiquitos es porque me haces feliz" loading="lazy">
-                </div>
-                <div class="caption">
-                    <p class="caption-text">"Si tengo los ojos chiquitos es porque me haces feliz"</p>
-                    <span class="caption-number">04</span>
-                </div>
-            </div>
-        </section>
+        <div class="polaroids" id="polaroids">
+            <figure class="polaroid reveal"><img src="img/foto 1.jpg" alt="1er Jaripeo Plazuela juntos" loading="lazy"><figcaption><span class="num">Nº 01</span>1er Jaripeo Plazuela juntos</figcaption></figure>
+            <figure class="polaroid reveal"><img src="img/foto 2.jpg" alt="Lo mejor no es Galvan Grill, lo mejor eres tú!" loading="lazy"><figcaption><span class="num">Nº 02</span>Lo mejor no es Galvan Grill, lo mejor eres tú!</figcaption></figure>
+            <figure class="polaroid reveal"><img src="img/foto 3.jpg" alt="El sol solo ilumina mas tu belleza" loading="lazy"><figcaption><span class="num">Nº 03</span>El sol solo ilumina mas tu belleza</figcaption></figure>
+            <figure class="polaroid reveal"><img src="img/foto 4.jpg" alt="Si tengo los ojos chiquitos es porque me haces feliz" loading="lazy"><figcaption><span class="num">Nº 04</span>Si tengo los ojos chiquitos es porque me haces feliz</figcaption></figure>
+            <figure class="polaroid reveal"><img src="img/foto 5.jpg" alt="Coleccionando momentos (y comida)" loading="lazy"><figcaption><span class="num">Nº 05</span>Coleccionando momentos (y comida)</figcaption></figure>
+            <figure class="polaroid reveal"><img src="img/foto 6.jpg" alt="Hay amor en los tacos de Beto" loading="lazy"><figcaption><span class="num">Nº 06</span>Hay amor en los tacos de Beto</figcaption></figure>
+            <figure class="polaroid reveal"><img src="img/foto 7.jpg" alt="Fererio y collares del amor" loading="lazy"><figcaption><span class="num">Nº 07</span>Fererio y collares del amor</figcaption></figure>
+            <figure class="polaroid reveal"><img src="img/foto 8.jpg" alt="El arte de coincidir contigo" loading="lazy"><figcaption><span class="num">Nº 08</span>El arte de coincidir contigo</figcaption></figure>
+            <figure class="polaroid reveal"><img src="img/foto 9.jpg" alt="Aventuras de dos locos sueltos" loading="lazy"><figcaption><span class="num">Nº 09</span>Aventuras de dos locos sueltos</figcaption></figure>
+            <figure class="polaroid reveal"><img src="img/foto 10.jpg" alt="Simplemente nosotros" loading="lazy"><figcaption><span class="num">Nº 10</span>Simplemente nosotros</figcaption></figure>
+            <figure class="polaroid reveal"><img src="img/foto 11.jpg" alt="Capítulo: Tú y Yo" loading="lazy"><figcaption><span class="num">Nº 11</span>Capítulo: Tú y Yo</figcaption></figure>
+            <figure class="polaroid reveal"><img src="img/foto 12.jpg" alt="Nuestra primer Posada juntos" loading="lazy"><figcaption><span class="num">Nº 12</span>Nuestra primer Posada juntos</figcaption></figure>
+            <figure class="polaroid reveal"><img src="img/foto 13.jpg" alt="Un año en 13 suspiros" loading="lazy"><figcaption><span class="num">Nº 13</span>Un año en 13 suspiros</figcaption></figure>
+        </div>
+        <div id="flashlight" aria-hidden="true"></div>
+    </section>
 
-        <section class="slide art-slide">
-            <div class="art-content fade-in">
-                <div class="frame">
-                    <img src="img/foto 5.jpg" alt="Coleccionando momentos (y comida)" loading="lazy">
-                </div>
-                <div class="caption">
-                    <p class="caption-text">"Coleccionando momentos (y comida)"</p>
-                    <span class="caption-number">05</span>
-                </div>
-            </div>
-        </section>
-
-        <section class="slide art-slide">
-            <div class="art-content fade-in">
-                <div class="frame">
-                    <img src="img/foto 6.jpg" alt="Hay amor en los tacos de Beto" loading="lazy">
-                </div>
-                <div class="caption">
-                    <p class="caption-text">"Hay amor en los tacos de Beto"</p>
-                    <span class="caption-number">06</span>
-                </div>
-            </div>
-        </section>
-
-        <section class="slide art-slide">
-            <div class="art-content fade-in">
-                <div class="frame">
-                    <img src="img/foto 7.jpg" alt="Fererio y collares del amor" loading="lazy">
-                </div>
-                <div class="caption">
-                    <p class="caption-text">"Fererio y collares del amor"</p>
-                    <span class="caption-number">07</span>
-                </div>
-            </div>
-        </section>
-
-        <section class="slide art-slide">
-            <div class="art-content fade-in">
-                <div class="frame">
-                    <img src="img/foto 8.jpg" alt="El arte de coincidir contigo" loading="lazy">
-                </div>
-                <div class="caption">
-                    <p class="caption-text">"El arte de coincidir contigo"</p>
-                    <span class="caption-number">08</span>
-                </div>
-            </div>
-        </section>
-
-        <section class="slide art-slide">
-            <div class="art-content fade-in">
-                <div class="frame">
-                    <img src="img/foto 9.jpg" alt="Aventuras de dos locos sueltos" loading="lazy">
-                </div>
-                <div class="caption">
-                    <p class="caption-text">"Aventuras de dos locos sueltos"</p>
-                    <span class="caption-number">09</span>
-                </div>
-            </div>
-        </section>
-
-        <section class="slide art-slide">
-            <div class="art-content fade-in">
-                <div class="frame">
-                    <img src="img/foto 10.jpg" alt="Simplemente nosotros" loading="lazy">
-                </div>
-                <div class="caption">
-                    <p class="caption-text">"Simplemente nosotros"</p>
-                    <span class="caption-number">10</span>
-                </div>
-            </div>
-        </section>
-
-        <section class="slide art-slide">
-            <div class="art-content fade-in">
-                <div class="frame">
-                    <img src="img/foto 11.jpg" alt="Capítulo: Tú y Yo" loading="lazy">
-                </div>
-                <div class="caption">
-                    <p class="caption-text">"Capítulo: Tú y Yo"</p>
-                    <span class="caption-number">11</span>
-                </div>
-            </div>
-        </section>
-
-        <section class="slide art-slide">
-            <div class="art-content fade-in">
-                <div class="frame">
-                    <img src="img/foto 12.jpg" alt="Nuestra primer Posada juntos" loading="lazy">
-                </div>
-                <div class="caption">
-                    <p class="caption-text">"Nuestra primer Posada juntos"</p>
-                    <span class="caption-number">12</span>
-                </div>
-            </div>
-        </section>
-
-        <section class="slide art-slide">
-            <div class="art-content fade-in">
-                <div class="frame">
-                    <img src="img/foto 13.jpg" alt="Un año en 13 suspiros" loading="lazy">
-                </div>
-                <div class="caption">
-                    <p class="caption-text">"Un año en 13 suspiros"</p>
-                    <span class="caption-number">13</span>
-                </div>
-            </div>
-        </section>
-
-        <!-- Final Slide -->
-        <section class="slide end-slide">
-            <div class="intro-content fade-in">
-                <h1 class="title">Eternidad</h1>
-                <p class="quote">"El amor, el amor... nuestro amor... mi niña me haces inmensamente feliz. Estar a tu lado es tenerlo todo."</p>
-                <p class="subtitle" style="margin-top: 40px; font-style: italic;">Con todo mi amor, Tu hermoso hombre de chocolate blanco 🌸</p>
-            </div>
-        </section>
-
-    </main>
+    <!-- ========== 4. HECHIZADOS ========== -->
+    <footer class="finale" id="final">
+        <div class="ghost" aria-hidden="true">👻</div>
+        <div class="candles" aria-hidden="true">
+            <div class="candle"><span class="flame"></span></div>
+            <div class="candle tall"><span class="flame"></span></div>
+            <div class="candle"><span class="flame"></span></div>
+        </div>
+        <div class="finale-content reveal">
+            <h2 class="title small">Hechizados</h2>
+            <p class="quote">"El amor, el amor... nuestro amor... mi niña me haces inmensamente feliz. Estar a tu lado es tenerlo todo, incluso en la noche más oscura."</p>
+            <p class="signature">Con todo mi amor,<br>Tu hermoso hombre de chocolate blanco 🎃🦇</p>
+        </div>
+    </footer>
 
     <script src="js/script.js"></script>
 </body>
