@@ -29,7 +29,9 @@
     <header class="portal" id="inicio">
         <div class="sky" aria-hidden="true">
             <div class="stars"></div>
-            <div class="moon"><div class="moon-crater c1"></div><div class="moon-crater c2"></div><div class="moon-crater c3"></div></div>
+            <div class="moon" id="moon"><div class="moon-crater c1"></div><div class="moon-crater c2"></div><div class="moon-crater c3"></div>
+                <svg class="moon-heart" viewBox="0 0 100 92"><defs><radialGradient id="heartGlow" cx="40%" cy="35%" r="70%"><stop offset="0%" stop-color="#FF8A8A"/><stop offset="60%" stop-color="#D3123A"/><stop offset="100%" stop-color="#7A0620"/></radialGradient></defs><path d="M50 90 C20 68 0 50 0 27 C0 11 12 0 27 0 C37 0 45 6 50 14 C55 6 63 0 73 0 C88 0 100 11 100 27 C100 50 80 68 50 90 Z" fill="url(#heartGlow)"/></svg>
+            </div>
             <div id="bats"></div>
         </div>
 
@@ -44,7 +46,7 @@
             <!-- colina lejana -->
             <path d="M0 360 Q240 280 480 330 T960 300 T1440 340 V520 H0 Z" fill="#1B1029"/>
             <!-- casa embrujada -->
-            <g class="house" transform="translate(1020 150)">
+            <g class="house" id="house" transform="translate(1020 150)">
                 <path d="M40 200 V90 L20 90 L95 10 L170 90 L150 90 V200 Z" fill="#0D0714"/>
                 <path d="M120 60 V20 H140 V78 Z" fill="#0D0714"/>
                 <path d="M150 200 V120 L140 120 L200 60 L260 120 L250 120 V200 Z" fill="#0D0714"/>
@@ -87,13 +89,25 @@
 
     <!-- ========== 2. LÁPIDA CONTADOR ========== -->
     <section class="graveyard" id="lapida">
-        <div class="tombstone reveal">
+        <div class="tombstone reveal" id="tombstone">
             <span class="rip">R.I.P.</span>
             <p class="tomb-label">Aquí yacen</p>
             <p class="tomb-days"><span id="counter-value">···</span></p>
             <p class="tomb-label">días embrujados juntos</p>
             <p class="tomb-date">desde el 21 · 07 · 2024</p>
             <p class="tomb-epitaph">y lo que nos falte de eternidad</p>
+            <!-- Solo el 21 de julio: nuestro aniversario -->
+            <div class="tomb-poem" id="tomb-poem" hidden>
+                <p class="tomb-anniv">Feliz aniversario · <span id="anniv-years"></span></p>
+                <p>Te pertenezco cuando ríes.<br>
+                Te pertenezco cuando callas.<br>
+                Cuando haces fiesta en mi boca, cuando entiendes todas mis mañas...<br>
+                Te pertenezco en reclusión, en absoluta libertad,<br>
+                más allá del miedo, más allá de la tempestad...<br>
+                Te pertenezco, porque es un placer pertenecerte,<br>
+                porque no creo en la suerte, solo en la bendición de tenerte.</p>
+                <p class="tomb-date">21 · 07 · 2024</p>
+            </div>
         </div>
         <span class="grave-pumpkin left" aria-hidden="true">🎃</span>
         <span class="grave-pumpkin right" aria-hidden="true">🎃</span>
@@ -128,7 +142,7 @@
 
     <!-- ========== 4. HECHIZADOS ========== -->
     <footer class="finale" id="final">
-        <div class="ghost" aria-hidden="true">👻</div>
+        <button class="ghost" id="ghost" type="button" aria-label="Un fantasma tímido">👻</button>
         <div class="candles" aria-hidden="true">
             <div class="candle"><span class="flame"></span></div>
             <div class="candle tall"><span class="flame"></span></div>
@@ -140,6 +154,17 @@
             <p class="signature">Con todo mi amor,<br>Tu hermoso hombre de chocolate blanco 🎃🦇</p>
         </div>
     </footer>
+
+    <!-- Ventana para los secretos (fantasma y hechizo) -->
+    <div class="secret-overlay" id="secret-overlay" hidden>
+        <div class="secret-card" role="dialog" aria-modal="true">
+            <button class="secret-close" id="secret-close" type="button" aria-label="Cerrar">✕</button>
+            <div id="secret-content"></div>
+        </div>
+    </div>
+
+    <!-- Pétalos de la luna roja -->
+    <div id="petals" aria-hidden="true"></div>
 
     <script src="js/script.js"></script>
 </body>
