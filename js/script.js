@@ -1,36 +1,92 @@
-// --- 1. CURSOR DE VELA ---
-const candleCursor = document.getElementById('candle-cursor');
-const hasMouse = window.matchMedia('(pointer: fine)').matches;
+// =========================================================
+// FOTOS: para agregar una foto nueva, súbela a img/ y añade
+// una línea aquí con su archivo y su frase.
+// =========================================================
+const FOTOS = [
+    { src: 'img/foto 1.jpg',  texto: '1er Jaripeo Plazuela juntos' },
+    { src: 'img/foto 2.jpg',  texto: 'Lo mejor no es Galvan Grill, lo mejor eres tú!' },
+    { src: 'img/foto 3.jpg',  texto: 'El sol solo ilumina mas tu belleza' },
+    { src: 'img/foto 4.jpg',  texto: 'Si tengo los ojos chiquitos es porque me haces feliz' },
+    { src: 'img/foto 5.jpg',  texto: 'Coleccionando momentos (y comida)' },
+    { src: 'img/foto 6.jpg',  texto: 'Hay amor en los tacos de Beto' },
+    { src: 'img/foto 7.jpg',  texto: 'Fererio y collares del amor' },
+    { src: 'img/foto 8.jpg',  texto: 'El arte de coincidir contigo' },
+    { src: 'img/foto 9.jpg',  texto: 'Aventuras de dos locos sueltos' },
+    { src: 'img/foto 10.jpg', texto: 'Simplemente nosotros' },
+    { src: 'img/foto 11.jpg', texto: 'Capítulo: Tú y Yo' },
+    { src: 'img/foto 12.jpg', texto: 'Nuestra primer Posada juntos' },
+    { src: 'img/foto 13.jpg', texto: 'Un año en 13 suspiros' },
+    { src: 'img/foto 14.jpg', texto: 'Ninguna lucecita brilla como tú' },
+    { src: 'img/foto 15.jpg', texto: 'Dando vueltas, pero siempre de regreso a ti' },
+    { src: 'img/foto 16.jpg', texto: 'Mi lugar favorito: a tu lado' },
+];
+
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const isNarrow = window.innerWidth < 700;
 
-let mouseX = -100, mouseY = -100;
-let cursorX = -100, cursorY = -100;
+// --- 1. NIEVE ---
+(function nevar() {
+    const snow = document.getElementById('snow');
+    if (!snow || reduceMotion) return;
+    const count = isNarrow ? 40 : 80;
+    for (let i = 0; i < count; i++) {
+        const f = document.createElement('span');
+        f.className = 'flake';
+        const size = 2 + Math.random() * 5;
+        f.style.width = f.style.height = `${size}px`;
+        f.style.left = `${Math.random() * 100}vw`;
+        f.style.opacity = `${0.35 + Math.random() * 0.6}`;
+        f.style.animationDuration = `${9 + Math.random() * 12}s, ${3 + Math.random() * 4}s`;
+        f.style.animationDelay = `${-Math.random() * 20}s, ${-Math.random() * 5}s`;
+        snow.appendChild(f);
+    }
+})();
 
-if (hasMouse && candleCursor) {
-    document.body.classList.add('has-cursor');
-    document.addEventListener('mousemove', (e) => {
-        mouseX = e.clientX;
-        mouseY = e.clientY;
+// --- 2. ESFERA: DÍAS JUNTOS Y CUENTA REGRESIVA ---
+(function contador() {
+    const hoy = new Date();
+    const dia = 1000 * 60 * 60 * 24;
+    const inicio = new Date('2024-07-21T00:00:00');
+    document.getElementById('counter-value').innerText = Math.floor((hoy - inicio) / dia);
+
+    const el = document.getElementById('countdown');
+    const medianoche = new Date(hoy.getFullYear(), hoy.getMonth(), hoy.getDate());
+    let navidad = new Date(hoy.getFullYear(), 11, 25);
+    if (hoy.getMonth() === 11 && hoy.getDate() === 25) {
+        el.innerHTML = '🎄 ¡Hoy es Navidad! 🎄';
+        return;
+    }
+    if (hoy.getMonth() === 11 && hoy.getDate() === 24) {
+        el.innerHTML = '✨ Hoy es Nochebuena: esta noche es nuestra ✨';
+        return;
+    }
+    if (medianoche > navidad) navidad = new Date(hoy.getFullYear() + 1, 11, 25);
+    const faltan = Math.round((navidad - medianoche) / dia);
+    el.innerHTML = `Faltan <strong>${faltan}</strong> ${faltan === 1 ? 'día' : 'días'} para nuestra Navidad`;
+})();
+
+// --- 3. FOTOS COLGADAS ---
+(function colgarFotos() {
+    const cont = document.getElementById('polaroids');
+    if (!cont) return;
+    FOTOS.forEach((foto, i) => {
+        const fig = document.createElement('figure');
+        fig.className = 'polaroid reveal';
+        fig.style.setProperty('--d', `${(i % 4) * 0.08}s`);
+        const num = String(i + 1).padStart(2, '0');
+        fig.innerHTML = `
+            <span class="wire" aria-hidden="true"></span>
+            <span class="bulb l${(i % 4) + 1}" aria-hidden="true"></span>
+            <span class="clip" aria-hidden="true"></span>
+            <img src="${foto.src}" alt="${foto.texto}" loading="lazy">
+            <figcaption><span class="num">Nº ${num}</span>${foto.texto}</figcaption>`;
+        cont.appendChild(fig);
     });
+    const contador = document.getElementById('photo-count');
+    if (contador) contador.innerText = FOTOS.length;
+})();
 
-    (function animateCursor() {
-        cursorX += (mouseX - cursorX) * 0.35;
-        cursorY += (mouseY - cursorY) * 0.35;
-        candleCursor.style.transform = `translate(${cursorX}px, ${cursorY}px) translate(-50%, -50%)`;
-        requestAnimationFrame(animateCursor);
-    })();
-}
-
-// --- 2. LÁPIDA: DÍAS JUNTOS ---
-function updateCounter() {
-    const startDate = new Date("2024-07-21T00:00:00");
-    const days = Math.floor((new Date() - startDate) / (1000 * 60 * 60 * 24));
-    const counterEl = document.getElementById('counter-value');
-    if (counterEl) counterEl.innerText = days;
-}
-updateCounter();
-
-// --- 3. APARICIÓN AL HACER SCROLL ---
+// --- 4. APARICIÓN AL HACER SCROLL ---
 const revealObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
         if (entry.isIntersecting) {
@@ -38,62 +94,25 @@ const revealObserver = new IntersectionObserver((entries) => {
             revealObserver.unobserve(entry.target);
         }
     });
-}, { threshold: 0.15 });
-
+}, { threshold: 0.12 });
 document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
 
-// En pantallas angostas, encuadra el paisaje sobre la casa embrujada
+// En pantallas angostas, encuadra el paisaje sobre la cabaña y el árbol
 const landscape = document.querySelector('.landscape');
-if (landscape && window.innerWidth < 700) {
-    landscape.setAttribute('preserveAspectRatio', 'xMaxYMax slice');
-}
+if (landscape && isNarrow) landscape.setAttribute('preserveAspectRatio', 'xMaxYMax slice');
 
-// --- 4. MURCIÉLAGOS ---
-(function spawnBats() {
-    const sky = document.getElementById('bats');
-    if (!sky || reduceMotion) return;
+// --- 5. MÚSICA ---
+const musica = document.getElementById('miMusica');
+const player = document.getElementById('music-player');
 
-    const batSvg = '<svg viewBox="0 0 64 32"><path fill="currentColor" d="M32 10c-2 0-3 2-3 2s-1-3-2-3c0 2 1 4 1 4C22 8 10 4 0 10c6 0 10 4 11 9 3-3 7-3 9 0 2-2 6-2 8 2 1-1 2-2 4-2s3 1 4 2c2-4 6-4 8-2 2-3 6-3 9 0 1-5 5-9 11-9-10-6-22-2-28 3 0 0 1-2 1-4-1 0-2 3-2 3s-1-2-3-2z"/></svg>';
-    const count = window.innerWidth < 700 ? 4 : 7;
-
-    for (let i = 0; i < count; i++) {
-        const bat = document.createElement('div');
-        bat.className = 'bat';
-        bat.innerHTML = batSvg;
-        bat.style.top = `${6 + Math.random() * 40}%`;
-        bat.style.width = `${24 + Math.random() * 30}px`;
-        bat.style.animationDuration = `${12 + Math.random() * 14}s`;
-        bat.style.animationDelay = `${-Math.random() * 20}s`;
-        sky.appendChild(bat);
-    }
-})();
-
-// --- 5. LINTERNA EN EL MURO DE RECUERDOS ---
-(function flashlight() {
-    const wall = document.getElementById('recuerdos');
-    if (!wall || !hasMouse) return;
-
-    wall.addEventListener('mousemove', (e) => {
-        const rect = wall.getBoundingClientRect();
-        wall.style.setProperty('--x', `${e.clientX - rect.left}px`);
-        wall.style.setProperty('--y', `${e.clientY - rect.top}px`);
-        wall.classList.add('lit');
-    });
-    wall.addEventListener('mouseleave', () => wall.classList.remove('lit'));
-})();
-
-// --- 6. MÚSICA ---
 function toggleMusica() {
-    const musica = document.getElementById('miMusica');
     const icono = document.getElementById('music-icon');
-    const player = document.getElementById('music-player');
-
     if (musica.paused) {
         musica.play().then(() => {
             icono.innerText = 'Sonando';
             player.classList.add('playing');
             player.setAttribute('aria-label', 'Pausar música');
-        }).catch(() => console.log("Esperando interacción del usuario..."));
+        }).catch(() => console.log('Esperando interacción del usuario...'));
     } else {
         musica.pause();
         icono.innerText = 'Pausa';
@@ -101,25 +120,16 @@ function toggleMusica() {
         player.setAttribute('aria-label', 'Reproducir música');
     }
 }
+player.addEventListener('click', toggleMusica);
 
-// "Entra si te atreves" también enciende la música
-const enterBtn = document.getElementById('enter-btn');
-if (enterBtn) {
-    enterBtn.addEventListener('click', () => {
-        const musica = document.getElementById('miMusica');
-        if (musica && musica.paused) toggleMusica();
-    });
-}
+// "Abre tu regalo" también enciende la música
+document.getElementById('enter-btn').addEventListener('click', () => {
+    if (musica.paused) toggleMusica();
+});
 
 // =========================================================
-// EASTER EGGS
+// EASTER EGGS DE NAVIDAD
 // =========================================================
-
-// --- 7. HECHIZO DEL NOMBRE ---
-// Si escribe su nombre (o lo susurra tocando la casa), la casa se ilumina.
-const HECHIZO_NOMBRE = "Mariana";
-const HECHIZO_MENSAJE = "¡Es un intercambio equivalente! Te daré la mitad de mi vida, así que... ¡dame la mitad de la tuya!";
-
 const secretOverlay = document.getElementById('secret-overlay');
 const secretContent = document.getElementById('secret-content');
 
@@ -127,157 +137,106 @@ function abrirSecreto(html) {
     secretContent.innerHTML = html;
     secretOverlay.hidden = false;
 }
-
 function cerrarSecreto() {
     secretOverlay.hidden = true;
     secretContent.innerHTML = '';
 }
+document.getElementById('secret-close').addEventListener('click', cerrarSecreto);
+secretOverlay.addEventListener('click', (e) => { if (e.target === secretOverlay) cerrarSecreto(); });
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !secretOverlay.hidden) cerrarSecreto(); });
 
-if (secretOverlay) {
-    document.getElementById('secret-close').addEventListener('click', cerrarSecreto);
-    secretOverlay.addEventListener('click', (e) => { if (e.target === secretOverlay) cerrarSecreto(); });
-    document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !secretOverlay.hidden) cerrarSecreto(); });
-}
-
-// Quita acentos y espacios para que "Sofía" y "sofia" valgan igual
-function normalizar(texto) {
-    return texto.normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-zñ]/gi, '').toLowerCase();
-}
-
-function lanzarHechizo() {
-    const portal = document.querySelector('.portal');
-    if (portal) portal.classList.add('spelled');
-    abrirSecreto(`
-        <div class="spell-card">
-            <p class="eyebrow">El hechizo funcionó</p>
-            <h3>${HECHIZO_NOMBRE}</h3>
-            <p class="quote">"${HECHIZO_MENSAJE}"</p>
-        </div>`);
-}
-
-(function hechizoNombre() {
-    const palabra = normalizar(HECHIZO_NOMBRE);
-    let buffer = '';
-
-    document.addEventListener('keydown', (e) => {
-        if (e.target.closest('input, textarea') || e.key.length !== 1) return;
-        buffer = (buffer + normalizar(e.key)).slice(-palabra.length);
-        if (buffer === palabra) {
-            buffer = '';
-            lanzarHechizo();
-        }
+// Permite activar con Enter/Espacio los elementos SVG con role="button"
+function alActivar(el, fn) {
+    el.addEventListener('click', fn);
+    el.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); fn(); }
     });
+}
 
-    // En el celular no hay teclado: tocar la casa abre un susurro
-    const house = document.getElementById('house');
-    if (!house) return;
-    house.addEventListener('click', () => {
-        abrirSecreto(`
-            <div class="spell-card" id="spell-ask">
-                <p class="eyebrow">La casa embrujada te escucha</p>
-                <h3>Susurra el hechizo</h3>
-                <form id="spell-form">
-                    <input id="spell-input" type="text" autocomplete="off" placeholder="..." aria-label="Hechizo">
-                    <button type="submit">✨</button>
-                </form>
-            </div>`);
-        const input = document.getElementById('spell-input');
-        input.focus();
-        document.getElementById('spell-form').addEventListener('submit', (e) => {
-            e.preventDefault();
-            if (normalizar(input.value) === palabra) {
-                lanzarHechizo();
-            } else {
-                const card = document.getElementById('spell-ask');
-                card.classList.remove('wrong');
-                void card.offsetWidth;
-                card.classList.add('wrong');
-                input.value = '';
-            }
-        });
-    });
-})();
-
-// --- 8. FANTASMA TÍMIDO ---
-// 3 toques y se quita la sábana: debajo estamos nosotros.
-(function fantasmaTimido() {
-    const ghost = document.getElementById('ghost');
-    if (!ghost) return;
+// --- 6. EL REGALO BAJO EL ÁRBOL ---
+// 5 toques: se sacude, y al quinto se abre. Dentro estamos nosotros.
+(function regalo() {
+    const gift = document.getElementById('gift');
+    if (!gift) return;
     let toques = 0;
-
-    ghost.addEventListener('click', () => {
+    alActivar(gift, () => {
         toques++;
-        if (toques < 3) {
-            ghost.classList.remove('shy');
-            void ghost.offsetWidth;
-            ghost.classList.add('shy');
+        if (toques < 5) {
+            gift.classList.remove('shake');
+            void gift.getBoundingClientRect();
+            gift.classList.add('shake');
             return;
         }
-        ghost.classList.add('gone');
+        gift.classList.add('open');
         setTimeout(() => {
             abrirSecreto(`
-                <figure class="polaroid">
-                    <img src="img/foto-fantasma.jpg" alt="Nosotros, debajo de la sábana">
-                    <figcaption><span class="num">Nº 00 · secreto</span>¡Me descubriste! Debajo de la sábana siempre fuimos nosotros</figcaption>
+                <figure class="polaroid gift-photo">
+                    <img src="img/foto-regalo.jpg" alt="Nosotros, el mejor regalo">
+                    <figcaption><span class="num">Nº 00 · regalo</span>Lo abriste antes de tiempo... pero el mejor regalo siempre fuimos nosotros</figcaption>
                 </figure>`);
-        }, 900);
-        // El fantasma regresa después, por si quiere volver a asustarlo
-        setTimeout(() => { ghost.classList.remove('gone', 'shy'); toques = 0; }, 4000);
+        }, 700);
+        setTimeout(() => { gift.classList.remove('open', 'shake'); toques = 0; }, 4000);
     });
 })();
 
-// --- 9. LUNA ROJA ---
-// 7 clics en la luna: se vuelve corazón y caen pétalos.
-(function lunaRoja() {
-    const moon = document.getElementById('moon');
-    if (!moon) return;
-    let clics = 0;
-
-    moon.addEventListener('click', () => {
-        moon.classList.add('tap');
-        setTimeout(() => moon.classList.remove('tap'), 150);
-        clics++;
-        if (clics === 7) {
-            moon.classList.add('blood');
-            document.querySelector('.portal').classList.add('blood-night');
-            lluviaDePetalos();
-        } else if (clics > 7) {
-            lluviaDePetalos();
-        }
+// --- 7. EL MUÉRDAGO ---
+// Tocarlo deja caer corazones y un vale por un beso.
+(function muerdago() {
+    const mistletoe = document.getElementById('mistletoe');
+    if (!mistletoe) return;
+    mistletoe.addEventListener('click', () => {
+        mistletoe.classList.add('kissed');
+        lluviaDeCorazones();
+        setTimeout(() => {
+            abrirSecreto(`
+                <div class="coupon">
+                    <p class="eyebrow">Estás bajo el muérdago</p>
+                    <h3>Vale por un beso</h3>
+                    <p class="quote">"Las reglas son las reglas: quien se para bajo el muérdago, se lleva un beso."</p>
+                    <dl>
+                        <div><dt>Para</dt><dd>Mariana</dd></div>
+                        <div><dt>Válido</dt><dd>siempre</dd></div>
+                        <div><dt>Canjes</dt><dd>ilimitados</dd></div>
+                    </dl>
+                </div>`);
+        }, 900);
     });
 
-    function lluviaDePetalos() {
-        const petals = document.getElementById('petals');
-        if (!petals || reduceMotion) return;
-        for (let i = 0; i < 45; i++) {
-            const p = document.createElement('span');
-            p.className = 'petal';
-            p.style.left = `${Math.random() * 100}vw`;
-            p.style.animationDuration = `${5 + Math.random() * 5}s`;
-            p.style.animationDelay = `${Math.random() * 3}s`;
-            p.style.setProperty('--drift', `${-80 + Math.random() * 160}px`);
-            p.style.setProperty('--spin', `${300 + Math.random() * 500}deg`);
-            p.style.scale = `${0.7 + Math.random() * 0.7}`;
-            p.addEventListener('animationend', () => p.remove());
-            petals.appendChild(p);
+    function lluviaDeCorazones() {
+        const hearts = document.getElementById('hearts');
+        if (!hearts || reduceMotion) return;
+        const simbolos = ['❤', '♥', '❤', '✦'];
+        for (let i = 0; i < 40; i++) {
+            const h = document.createElement('span');
+            h.className = 'heart';
+            h.textContent = simbolos[i % simbolos.length];
+            h.style.left = `${Math.random() * 100}vw`;
+            h.style.fontSize = `${14 + Math.random() * 18}px`;
+            h.style.animationDuration = `${4 + Math.random() * 4}s`;
+            h.style.animationDelay = `${Math.random() * 2.5}s`;
+            h.style.setProperty('--drift', `${-80 + Math.random() * 160}px`);
+            h.addEventListener('animationend', () => h.remove());
+            hearts.appendChild(h);
         }
     }
 })();
 
-// --- 10. LÁPIDA DEL 21/07 ---
-// Solo el día de nuestro aniversario la lápida guarda un poema.
-// (Para verlo cualquier otro día: abrir la página con ?aniversario)
-(function lapidaAniversario() {
-    const hoy = new Date();
-    const esAniversario = hoy.getMonth() === 6 && hoy.getDate() === 21;
-    if (!esAniversario && !new URLSearchParams(location.search).has('aniversario')) return;
-
-    const tomb = document.getElementById('tombstone');
-    const poem = document.getElementById('tomb-poem');
-    if (!tomb || !poem) return;
-
-    const anios = Math.max(1, hoy.getFullYear() - 2024);
-    document.getElementById('anniv-years').innerText = `${anios} ${anios === 1 ? 'año' : 'años'}`;
-    tomb.classList.add('anniversary');
-    poem.hidden = false;
+// --- 8. LA CARTA A SANTA ---
+// Escondida en la bota del centro.
+(function cartaASanta() {
+    const letter = document.getElementById('letter');
+    if (!letter) return;
+    letter.addEventListener('click', () => {
+        abrirSecreto(`
+            <div class="santa-letter">
+                <p class="letter-head">Polo Norte · Diciembre</p>
+                <h3>Querido Santa:</h3>
+                <p>Este año me porté bien (casi siempre). No te voy a pedir nada,
+                porque lo que más quería me lo diste antes de tiempo, y se llama Mariana.</p>
+                <p>Solo te pido que la cuides, que nunca le falten risas, tacos de Beto
+                ni abrazos míos. Y si te sobra espacio en el trineo, tráenos muchos
+                días más como los nuestros.</p>
+                <p class="letter-sign">Atentamente,<br>el niño más afortunado del mundo</p>
+            </div>`);
+    });
 })();
