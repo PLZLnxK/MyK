@@ -3,159 +3,202 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nuestro Halloween</title>
+    <title>Nuestra Navidad</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Creepster&family=Caveat:wght@500;700&family=Cormorant+Garamond:ital,wght@1,400;1,600&family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Mountains+of+Christmas:wght@700&family=Caveat:wght@500;700&family=Cormorant+Garamond:ital,wght@1,400;1,600&family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎃</text></svg>">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎄</text></svg>">
 </head>
 <body>
-    <!-- Cursor de vela (solo con mouse) -->
-    <div id="candle-cursor" aria-hidden="true"></div>
+    <!-- Nieve que cae sobre toda la página -->
+    <div id="snow" aria-hidden="true"></div>
 
-    <!-- Reproductor: calabaza flotante -->
-    <button id="music-player" type="button" onclick="toggleMusica()" aria-label="Reproducir música">
-        <span class="pumpkin-btn">🎃</span>
+    <!-- Reproductor: esfera flotante -->
+    <button id="music-player" type="button" aria-label="Reproducir música">
+        <span class="ornament-btn" aria-hidden="true"></span>
         <span class="eq" aria-hidden="true"><i></i><i></i><i></i></span>
         <span id="music-icon">Música</span>
     </button>
     <audio id="miMusica" loop preload="none">
-        <source src="audio/halloween.mp3" type="audio/mpeg">
+        <source src="audio/navidad.mp3" type="audio/mpeg">
     </audio>
 
-    <!-- ========== 1. PORTAL ========== -->
+    <!-- ========== 1. PORTADA: NOCHE NEVADA ========== -->
     <header class="portal" id="inicio">
         <div class="sky" aria-hidden="true">
             <div class="stars"></div>
-            <div class="moon" id="moon"><div class="moon-crater c1"></div><div class="moon-crater c2"></div><div class="moon-crater c3"></div>
-                <svg class="moon-heart" viewBox="0 0 100 92"><defs><radialGradient id="heartGlow" cx="40%" cy="35%" r="70%"><stop offset="0%" stop-color="#FF8A8A"/><stop offset="60%" stop-color="#D3123A"/><stop offset="100%" stop-color="#7A0620"/></radialGradient></defs><path d="M50 90 C20 68 0 50 0 27 C0 11 12 0 27 0 C37 0 45 6 50 14 C55 6 63 0 73 0 C88 0 100 11 100 27 C100 50 80 68 50 90 Z" fill="url(#heartGlow)"/></svg>
-            </div>
-            <div id="bats"></div>
+            <div class="moon"></div>
         </div>
 
-        <!-- Paisaje: colina, casa embrujada, árboles y cementerio -->
-        <svg class="landscape" viewBox="0 0 1440 520" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+        <svg class="landscape" viewBox="0 0 1440 520" preserveAspectRatio="xMidYMax slice">
             <defs>
-                <radialGradient id="windowGlow" cx="50%" cy="50%" r="50%">
-                    <stop offset="0%" stop-color="#FFD27A"/>
-                    <stop offset="100%" stop-color="#FF7518"/>
+                <radialGradient id="windowGlow" cx="50%" cy="50%" r="60%">
+                    <stop offset="0%" stop-color="#FFE7A8"/>
+                    <stop offset="100%" stop-color="#F29E38"/>
                 </radialGradient>
+                <radialGradient id="treeGlow" cx="50%" cy="55%" r="50%">
+                    <stop offset="0%" stop-color="rgba(255,214,140,0.45)"/>
+                    <stop offset="100%" stop-color="rgba(255,214,140,0)"/>
+                </radialGradient>
+                <linearGradient id="snowFar" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#5E7A93"/>
+                    <stop offset="100%" stop-color="#2E4A60"/>
+                </linearGradient>
+                <linearGradient id="snowNear" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#DCE7F0"/>
+                    <stop offset="100%" stop-color="#9DB3C6"/>
+                </linearGradient>
+                <symbol id="pine" viewBox="0 0 100 170">
+                    <rect x="44" y="140" width="12" height="30" fill="#2A1B12"/>
+                    <path d="M50 0 L82 52 H66 L92 98 H72 L100 146 H0 L28 98 H8 L34 52 H18 Z" fill="#0E2B25"/>
+                    <path d="M50 0 L64 23 Q57 29 50 24 Q43 29 36 23 Z M34 52 H66 L71 60 Q60 66 50 61 Q40 66 29 60 Z M28 98 H72 L78 108 Q64 114 50 109 Q36 114 22 108 Z" fill="#E8F0F6"/>
+                </symbol>
             </defs>
-            <!-- colina lejana -->
-            <path d="M0 360 Q240 280 480 330 T960 300 T1440 340 V520 H0 Z" fill="#1B1029"/>
-            <!-- casa embrujada -->
-            <g class="house" id="house" transform="translate(1020 150)">
-                <path d="M40 200 V90 L20 90 L95 10 L170 90 L150 90 V200 Z" fill="#0D0714"/>
-                <path d="M120 60 V20 H140 V78 Z" fill="#0D0714"/>
-                <path d="M150 200 V120 L140 120 L200 60 L260 120 L250 120 V200 Z" fill="#0D0714"/>
-                <rect x="185" y="20" width="10" height="45" fill="#0D0714"/>
-                <rect class="win" x="70" y="105" width="18" height="26" fill="url(#windowGlow)"/>
-                <rect class="win w2" x="102" y="105" width="18" height="26" fill="url(#windowGlow)"/>
-                <rect class="win w3" x="190" y="135" width="20" height="24" fill="url(#windowGlow)"/>
-                <circle class="win w2" cx="95" cy="62" r="9" fill="url(#windowGlow)"/>
-                <path d="M84 200 V160 Q95 148 106 160 V200 Z" fill="#2A1640"/>
+
+            <!-- colina lejana y bosque -->
+            <path d="M0 330 Q220 260 470 305 T950 285 T1440 310 V520 H0 Z" fill="url(#snowFar)"/>
+            <g opacity="0.75">
+                <use href="#pine" x="40" y="225" width="60" height="100"/>
+                <use href="#pine" x="95" y="205" width="75" height="125"/>
+                <use href="#pine" x="170" y="240" width="55" height="90"/>
+                <use href="#pine" x="560" y="235" width="55" height="90"/>
+                <use href="#pine" x="610" y="215" width="70" height="115"/>
+                <use href="#pine" x="830" y="230" width="60" height="100"/>
             </g>
+
+            <!-- cabaña -->
+            <g class="cabin" transform="translate(1170 205)">
+                <g class="smoke">
+                    <circle cx="180" cy="-10" r="12"/><circle cx="188" cy="-10" r="10"/><circle cx="176" cy="-10" r="9"/>
+                </g>
+                <rect x="166" y="0" width="28" height="60" fill="#3A2A26"/>
+                <rect x="160" y="-6" width="40" height="12" rx="6" fill="#EEF4F8"/>
+                <path d="M20 190 V95 H240 V190 Z" fill="#4A2C1F"/>
+                <path d="M20 115 H240 M20 135 H240 M20 155 H240 M20 175 H240" stroke="#3A2117" stroke-width="3"/>
+                <path d="M0 102 L130 18 L260 102 Z" fill="#2B1A14"/>
+                <path d="M-6 104 Q10 88 30 92 L130 22 L230 92 Q250 88 266 104 Q250 112 236 104 Q220 114 200 104 Q180 113 160 104 Q140 114 120 104 Q100 113 80 104 Q60 114 40 104 Q20 113 -6 104 Z" fill="#F1F6FA"/>
+                <rect class="win" x="45" y="120" width="40" height="38" rx="3" fill="url(#windowGlow)"/>
+                <path d="M65 120 V158 M45 139 H85" stroke="#4A2C1F" stroke-width="4"/>
+                <rect class="win w2" x="175" y="120" width="40" height="38" rx="3" fill="url(#windowGlow)"/>
+                <path d="M195 120 V158 M175 139 H215" stroke="#4A2C1F" stroke-width="4"/>
+                <path d="M110 190 V132 Q130 116 150 132 V190 Z" fill="#7A1E24"/>
+                <circle cx="130" cy="146" r="10" fill="none" stroke="#2E6B3A" stroke-width="5"/>
+                <circle cx="130" cy="137" r="3" fill="#C8102E"/>
+                <circle cx="143" cy="165" r="2.5" fill="#E9C46A"/>
+                <!-- luces en el alero -->
+                <g class="eave-lights">
+                    <circle cx="20" cy="110" r="4" class="l1"/><circle cx="50" cy="111" r="4" class="l2"/><circle cx="80" cy="110" r="4" class="l3"/>
+                    <circle cx="110" cy="111" r="4" class="l4"/><circle cx="140" cy="110" r="4" class="l1"/><circle cx="170" cy="111" r="4" class="l2"/>
+                    <circle cx="200" cy="110" r="4" class="l3"/><circle cx="230" cy="111" r="4" class="l4"/>
+                </g>
+            </g>
+
+            <!-- árbol de Navidad -->
+            <g class="xmas-tree" transform="translate(985 165)">
+                <ellipse cx="80" cy="140" rx="120" ry="140" fill="url(#treeGlow)"/>
+                <rect x="70" y="215" width="20" height="28" fill="#3A2117"/>
+                <path d="M80 18 L118 78 H100 L134 140 H112 L152 220 H8 L48 140 H26 L60 78 H42 Z" fill="#14432F"/>
+                <path d="M46 92 Q80 110 112 88 M36 152 Q84 176 126 146 M24 206 Q80 226 138 200" stroke="#E9C46A" stroke-width="2.5" fill="none" opacity="0.8"/>
+                <g class="tree-lights">
+                    <circle cx="66" cy="62" r="4.5" class="l1"/><circle cx="94" cy="70" r="4.5" class="l3"/>
+                    <circle cx="56" cy="100" r="5" class="l2"/><circle cx="84" cy="106" r="5" class="l4"/><circle cx="108" cy="96" r="5" class="l1"/>
+                    <circle cx="44" cy="150" r="5" class="l3"/><circle cx="72" cy="162" r="5" class="l1"/><circle cx="100" cy="160" r="5" class="l2"/><circle cx="124" cy="148" r="5" class="l4"/>
+                    <circle cx="30" cy="204" r="5" class="l4"/><circle cx="58" cy="214" r="5" class="l2"/><circle cx="90" cy="216" r="5" class="l3"/><circle cx="120" cy="210" r="5" class="l1"/><circle cx="142" cy="200" r="5" class="l2"/>
+                </g>
+                <path class="tree-star" d="M80 -6 L86 10 L103 10 L89 20 L95 37 L80 27 L65 37 L71 20 L57 10 L74 10 Z" fill="#F7D774"/>
+            </g>
+
             <!-- colina cercana -->
-            <path d="M0 430 Q200 370 420 400 T860 390 T1440 420 V520 H0 Z" fill="#120A1C"/>
-            <!-- árbol torcido -->
-            <path d="M210 410 C205 340 215 300 190 250 C175 220 150 210 130 200 M190 250 C200 230 230 215 250 190 M200 300 C230 290 260 285 290 260 M185 330 C160 320 140 300 120 300" stroke="#0A0610" stroke-width="10" fill="none" stroke-linecap="round"/>
-            <path d="M200 412 C198 380 202 330 196 300" stroke="#0A0610" stroke-width="18" fill="none" stroke-linecap="round"/>
-            <!-- lápidas -->
-            <g fill="#0A0610">
-                <path d="M520 420 V385 Q540 360 560 385 V420 Z"/>
-                <path d="M600 415 V392 Q615 375 630 392 V415 Z"/>
-                <rect x="690" y="372" width="10" height="45"/><rect x="678" y="385" width="34" height="9"/>
-                <path d="M760 418 V390 Q778 368 796 390 V418 Z"/>
+            <path d="M0 425 Q260 370 520 395 T1000 400 T1440 405 V520 H0 Z" fill="url(#snowNear)"/>
+            <use href="#pine" x="-10" y="300" width="90" height="150"/>
+            <use href="#pine" x="70" y="335" width="65" height="110"/>
+            <use href="#pine" x="1360" y="320" width="80" height="135"/>
+
+            <!-- regalo bajo el árbol (secreto) -->
+            <g class="gift" id="gift" role="button" tabindex="0" aria-label="Un regalo bajo el árbol">
+                <rect x="1020" y="398" width="46" height="34" rx="3" fill="#C8102E"/>
+                <rect x="1039" y="398" width="8" height="34" fill="#F7D774"/>
+                <g class="gift-lid">
+                    <rect x="1016" y="388" width="54" height="12" rx="2" fill="#A50D26"/>
+                    <rect x="1039" y="388" width="8" height="12" fill="#F7D774"/>
+                    <path d="M1043 388 C1030 372 1022 384 1043 388 C1056 372 1064 384 1043 388 Z" fill="#F7D774"/>
+                </g>
+                <rect x="1072" y="414" width="26" height="20" rx="2" fill="#2E6B3A"/>
+                <rect x="1082" y="414" width="6" height="20" fill="#EEF4F8"/>
             </g>
-            <!-- reja -->
-            <g stroke="#0A0610" stroke-width="5">
-                <path d="M0 470 H1440"/>
-                <path d="M30 470 V440 M80 470 V440 M130 470 V440 M180 470 V440 M230 470 V440 M280 470 V440 M330 470 V440 M380 470 V440 M1060 470 V440 M1110 470 V440 M1160 470 V440 M1210 470 V440 M1260 470 V440 M1310 470 V440 M1360 470 V440 M1410 470 V440"/>
-            </g>
-            <path d="M0 520 V470 H1440 V520 Z" fill="#0A0610"/>
         </svg>
-        <div class="fog fog-1" aria-hidden="true"></div>
-        <div class="fog fog-2" aria-hidden="true"></div>
 
         <div class="portal-content">
-            <p class="eyebrow">Una exposición embrujada para ti</p>
-            <h1 class="title">Nuestro<br>Halloween</h1>
-            <p class="quote">"Ni el hechizo más poderoso se compara con el que tú me lanzaste. Eres mi dulce favorito, en esta noche y en todas."</p>
-            <a href="#lapida" class="enter-btn" id="enter-btn">🕯️ Entra si te atreves</a>
+            <p class="eyebrow">Un regalo envuelto con todo mi amor</p>
+            <h1 class="title">Nuestra<br>Navidad</h1>
+            <p class="quote">"No necesito nada bajo el árbol. Mi regalo favorito ya lo tengo, y se ríe conmigo todos los días."</p>
+            <a href="#contador" class="enter-btn" id="enter-btn">🎁 Abre tu regalo</a>
         </div>
     </header>
 
-    <!-- ========== 2. LÁPIDA CONTADOR ========== -->
-    <section class="graveyard" id="lapida">
-        <div class="tombstone reveal" id="tombstone">
-            <span class="rip">R.I.P.</span>
-            <p class="tomb-label">Aquí yacen</p>
-            <p class="tomb-days"><span id="counter-value">···</span></p>
-            <p class="tomb-label">días embrujados juntos</p>
-            <p class="tomb-date">desde el 21 · 07 · 2024</p>
-            <p class="tomb-epitaph">y lo que nos falte de eternidad</p>
-            <!-- Solo el 21 de julio: nuestro aniversario -->
-            <div class="tomb-poem" id="tomb-poem" hidden>
-                <p class="tomb-anniv">Feliz aniversario · <span id="anniv-years"></span></p>
-                <p>Te pertenezco cuando ríes.<br>
-                Te pertenezco cuando callas.<br>
-                Cuando haces fiesta en mi boca, cuando entiendes todas mis mañas...<br>
-                Te pertenezco en reclusión, en absoluta libertad,<br>
-                más allá del miedo, más allá de la tempestad...<br>
-                Te pertenezco, porque es un placer pertenecerte,<br>
-                porque no creo en la suerte, solo en la bendición de tenerte.</p>
-                <p class="tomb-date">21 · 07 · 2024</p>
+    <!-- ========== 2. ESFERA CONTADOR ========== -->
+    <section class="counter-scene" id="contador">
+        <div class="bokeh" aria-hidden="true"></div>
+        <div class="bauble reveal">
+            <span class="bauble-string" aria-hidden="true"></span>
+            <span class="bauble-cap" aria-hidden="true"></span>
+            <div class="bauble-ball">
+                <p class="bauble-label">Llevamos</p>
+                <p class="bauble-days"><span id="counter-value">···</span></p>
+                <p class="bauble-label">días juntos</p>
+                <p class="bauble-date">desde el 21 · 07 · 2024</p>
             </div>
         </div>
-        <span class="grave-pumpkin left" aria-hidden="true">🎃</span>
-        <span class="grave-pumpkin right" aria-hidden="true">🎃</span>
-        <div class="ground" aria-hidden="true"></div>
+        <p class="countdown reveal" id="countdown"></p>
     </section>
 
-    <!-- ========== 3. MURO DE LOS RECUERDOS ========== -->
+    <!-- ========== 3. RECUERDOS COLGADOS ========== -->
     <section class="wall" id="recuerdos">
-        <div class="spider" aria-hidden="true"><span class="thread"></span><span class="spider-body">🕷️</span></div>
         <div class="wall-heading reveal">
-            <p class="eyebrow">El muro de los recuerdos</p>
-            <h2 class="section-title">13 momentos hechizados</h2>
+            <p class="eyebrow">Recuerdos colgados entre luces</p>
+            <h2 class="section-title"><span id="photo-count">Nuestros</span> momentos favoritos</h2>
         </div>
-
-        <div class="polaroids" id="polaroids">
-            <figure class="polaroid reveal"><img src="img/foto 1.jpg" alt="1er Jaripeo Plazuela juntos" loading="lazy"><figcaption><span class="num">Nº 01</span>1er Jaripeo Plazuela juntos</figcaption></figure>
-            <figure class="polaroid reveal"><img src="img/foto 2.jpg" alt="Lo mejor no es Galvan Grill, lo mejor eres tú!" loading="lazy"><figcaption><span class="num">Nº 02</span>Lo mejor no es Galvan Grill, lo mejor eres tú!</figcaption></figure>
-            <figure class="polaroid reveal"><img src="img/foto 3.jpg" alt="El sol solo ilumina mas tu belleza" loading="lazy"><figcaption><span class="num">Nº 03</span>El sol solo ilumina mas tu belleza</figcaption></figure>
-            <figure class="polaroid reveal"><img src="img/foto 4.jpg" alt="Si tengo los ojos chiquitos es porque me haces feliz" loading="lazy"><figcaption><span class="num">Nº 04</span>Si tengo los ojos chiquitos es porque me haces feliz</figcaption></figure>
-            <figure class="polaroid reveal"><img src="img/foto 5.jpg" alt="Coleccionando momentos (y comida)" loading="lazy"><figcaption><span class="num">Nº 05</span>Coleccionando momentos (y comida)</figcaption></figure>
-            <figure class="polaroid reveal"><img src="img/foto 6.jpg" alt="Hay amor en los tacos de Beto" loading="lazy"><figcaption><span class="num">Nº 06</span>Hay amor en los tacos de Beto</figcaption></figure>
-            <figure class="polaroid reveal"><img src="img/foto 7.jpg" alt="Fererio y collares del amor" loading="lazy"><figcaption><span class="num">Nº 07</span>Fererio y collares del amor</figcaption></figure>
-            <figure class="polaroid reveal"><img src="img/foto 8.jpg" alt="El arte de coincidir contigo" loading="lazy"><figcaption><span class="num">Nº 08</span>El arte de coincidir contigo</figcaption></figure>
-            <figure class="polaroid reveal"><img src="img/foto 9.jpg" alt="Aventuras de dos locos sueltos" loading="lazy"><figcaption><span class="num">Nº 09</span>Aventuras de dos locos sueltos</figcaption></figure>
-            <figure class="polaroid reveal"><img src="img/foto 10.jpg" alt="Simplemente nosotros" loading="lazy"><figcaption><span class="num">Nº 10</span>Simplemente nosotros</figcaption></figure>
-            <figure class="polaroid reveal"><img src="img/foto 11.jpg" alt="Capítulo: Tú y Yo" loading="lazy"><figcaption><span class="num">Nº 11</span>Capítulo: Tú y Yo</figcaption></figure>
-            <figure class="polaroid reveal"><img src="img/foto 12.jpg" alt="Nuestra primer Posada juntos" loading="lazy"><figcaption><span class="num">Nº 12</span>Nuestra primer Posada juntos</figcaption></figure>
-            <figure class="polaroid reveal"><img src="img/foto 13.jpg" alt="Un año en 13 suspiros" loading="lazy"><figcaption><span class="num">Nº 13</span>Un año en 13 suspiros</figcaption></figure>
-        </div>
-        <div id="flashlight" aria-hidden="true"></div>
+        <!-- Las fotos se generan desde la lista FOTOS en js/script.js -->
+        <div class="polaroids" id="polaroids"></div>
     </section>
 
-    <!-- ========== 4. HECHIZADOS ========== -->
+    <!-- ========== 4. FINAL JUNTO A LA CHIMENEA ========== -->
     <footer class="finale" id="final">
-        <button class="ghost" id="ghost" type="button" aria-label="Un fantasma tímido">👻</button>
-        <div class="candles" aria-hidden="true">
-            <div class="candle"><span class="flame"></span></div>
-            <div class="candle tall"><span class="flame"></span></div>
-            <div class="candle"><span class="flame"></span></div>
+        <button class="mistletoe" id="mistletoe" type="button" aria-label="Un muérdago">
+            <span class="mistletoe-ribbon" aria-hidden="true"></span>
+            <svg viewBox="0 0 120 90" aria-hidden="true">
+                <path d="M60 4 C58 30 40 44 18 50 C36 30 50 20 60 4 Z" fill="#3E7D45"/>
+                <path d="M60 4 C62 30 80 44 102 50 C84 30 70 20 60 4 Z" fill="#3E7D45"/>
+                <path d="M60 10 C50 40 30 62 10 70 C26 46 44 30 60 10 Z" fill="#2E6B3A"/>
+                <path d="M60 10 C70 40 90 62 110 70 C94 46 76 30 60 10 Z" fill="#2E6B3A"/>
+                <circle cx="52" cy="40" r="7" fill="#F4F1E6"/><circle cx="66" cy="42" r="7" fill="#F4F1E6"/><circle cx="59" cy="52" r="7" fill="#F4F1E6"/>
+                <path d="M44 14 Q60 26 76 14 Q72 4 60 10 Q48 4 44 14 Z" fill="#C8102E"/>
+            </svg>
+        </button>
+
+        <div class="mantel">
+            <div class="garland" aria-hidden="true"></div>
+            <div class="stockings">
+                <span class="stocking s1" aria-hidden="true"><b>❤</b></span>
+                <span class="stocking s2">
+                    <button class="letter" id="letter" type="button" aria-label="Una carta escondida en la bota">✉️</button>
+                    <b aria-hidden="true">✦</b>
+                </span>
+                <span class="stocking s3" aria-hidden="true"><b>❤</b></span>
+            </div>
         </div>
+
         <div class="finale-content reveal">
-            <h2 class="title small">Hechizados</h2>
-            <p class="quote">"El amor, el amor... nuestro amor... mi niña me haces inmensamente feliz. Estar a tu lado es tenerlo todo, incluso en la noche más oscura."</p>
-            <p class="signature">Con todo mi amor,<br>Tu hermoso hombre de chocolate blanco 🎃🦇</p>
+            <h2 class="title small">Feliz Navidad,<br>mi amor</h2>
+            <p class="quote">"El amor, el amor... nuestro amor... mi niña me haces inmensamente feliz. Estar a tu lado es tenerlo todo, incluso en la noche más fría."</p>
+            <p class="signature">Con todo mi amor,<br>Tu hermoso hombre de chocolate blanco 🎄❤️</p>
         </div>
+        <div class="fire-glow" aria-hidden="true"></div>
     </footer>
 
-    <!-- Ventana para los secretos (fantasma y hechizo) -->
+    <!-- Ventana para los secretos -->
     <div class="secret-overlay" id="secret-overlay" hidden>
         <div class="secret-card" role="dialog" aria-modal="true">
             <button class="secret-close" id="secret-close" type="button" aria-label="Cerrar">✕</button>
@@ -163,8 +206,8 @@
         </div>
     </div>
 
-    <!-- Pétalos de la luna roja -->
-    <div id="petals" aria-hidden="true"></div>
+    <!-- Lluvia de corazones del muérdago -->
+    <div id="hearts" aria-hidden="true"></div>
 
     <script src="js/script.js"></script>
 </body>
